@@ -680,6 +680,24 @@ hr {
   transition: transform var(--dur-fast) var(--ease);
 }
 
+.tree-row .chev-space {
+  flex: 0 0 14px;
+  width: 14px;
+}
+
+.tree-row .file-icon {
+  flex: 0 0 auto;
+  width: 18px;
+  font-size: 15px;
+  line-height: 1;
+  text-align: center;
+}
+
+.tree-root > .tree-row .folder-name,
+.tree-pinned > .tree-row .folder-name {
+  color: var(--text);
+}
+
 .tree-folder.is-collapsed > .tree-row .chev {
   transform: rotate(-90deg);
 }
@@ -703,7 +721,7 @@ hr {
 
 .tree-post > a {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
   align-items: baseline;
   gap: var(--sp-3);
   padding: 11px 12px;
@@ -738,7 +756,7 @@ hr {
 }
 
 .tree-post .tagline {
-  grid-column: 1 / -1;
+  grid-column: 2 / -1;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
@@ -1319,12 +1337,12 @@ body.is-local .remote-only {
   }
 
   .tree-post > a {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: 18px minmax(0, 1fr);
     gap: 2px;
   }
 
   .tree-post .tagline {
-    grid-column: 1;
+    grid-column: 2;
   }
 
   .hero-actions .btn {

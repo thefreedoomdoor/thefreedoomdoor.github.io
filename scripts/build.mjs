@@ -174,7 +174,6 @@ function footHtml(site) {
 <footer class="site-foot">
   <div class="foot-inner">
     <span>© ${year} ${escapeHtml(meta.author || meta.title || "")}</span>
-    <span>静态站 · 由本机管理端发布</span>
   </div>
 </footer>`;
 }
@@ -276,7 +275,8 @@ function countPosts(node) {
   return total;
 }
 
-function postItemHtml(post) {  const tags = post.tags.length
+function postItemHtml(post) {
+  const tags = post.tags.length
     ? `<span class="tagline">${post.tags
         .map((t) => `<span class="tag">${escapeHtml(t)}</span>`)
         .join("")}</span>`
@@ -288,6 +288,7 @@ function postItemHtml(post) {  const tags = post.tags.length
   return `
 <li class="tree-post" data-date="${escapeAttr(post.date)}" data-title="${escapeAttr(post.title)}" data-search="${escapeAttr(search)}">
   <a href="${post.url}">
+    <span class="file-icon" aria-hidden="true">📄</span>
     <span class="post-title">${escapeHtml(post.title)}</span>
     <time datetime="${escapeAttr(post.date)}">${escapeHtml(post.date)}</time>
     ${tags}
@@ -312,13 +313,25 @@ function folderHtml(node, depth) {
     ...posts.map(postItemHtml),
   ].join("");
 
-  return `
-<li class="tree-folder" data-folder-name="${escapeAttr(node.name)}">
-  <button class="tree-row" type="button" aria-expanded="true">
+  // 只有真的还有子目录才需要收起按钮；根目录 documents 永远展开
+  const collapsible = node.folders.size > 0 && depth > 0;
+  const head = collapsible
+    ? `<button class="tree-row" type="button" aria-expanded="true">
     <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+    <span class="file-icon" aria-hidden="true">📂</span>
     <span class="folder-name">${escapeHtml(node.name)}</span>
     <span class="count">${total}</span>
-  </button>
+  </button>`
+    : `<div class="tree-row">
+    <span class="chev-space" aria-hidden="true"></span>
+    <span class="file-icon" aria-hidden="true">📂</span>
+    <span class="folder-name">${escapeHtml(node.name)}</span>
+    <span class="count">${total}</span>
+  </div>`;
+
+  return `
+<li class="tree-folder${depth === 0 ? " tree-root" : ""}" data-folder-name="${escapeAttr(node.name)}">
+  ${head}
   <ul class="tree-children">${children}</ul>
 </li>`;
 }
@@ -334,11 +347,12 @@ function pinnedHtml(posts) {
 
   return `
 <li class="tree-folder tree-pinned" data-folder-name="置顶">
-  <button class="tree-row" type="button" aria-expanded="true">
-    <svg class="pin-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 4h6l-1 5 3 3v2H7v-2l3-3-1-5z"/><path d="M12 14v6"/></svg>
+  <div class="tree-row">
+    <span class="chev-space" aria-hidden="true"></span>
+    <span class="file-icon" aria-hidden="true">📌</span>
     <span class="folder-name">置顶</span>
     <span class="count">${pinned.length}</span>
-  </button>
+  </div>
   <ul class="tree-children">${pinned.map(postItemHtml).join("")}</ul>
 </li>`;
 }

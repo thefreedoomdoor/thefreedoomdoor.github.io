@@ -13,7 +13,7 @@
   var folders = Array.prototype.slice.call(tree.querySelectorAll(".tree-folder"));
 
   folders.forEach(function (folder) {
-    var toggle = folder.querySelector(":scope > .tree-row");
+    var toggle = folder.querySelector(":scope > button.tree-row");
     if (!toggle) return;
     toggle.addEventListener("click", function () {
       var collapsed = folder.classList.toggle("is-collapsed");
@@ -66,7 +66,7 @@
       folder.hidden = query ? shown === 0 : false;
       if (query && shown > 0) {
         folder.classList.remove("is-collapsed");
-        var row = folder.querySelector(":scope > .tree-row");
+        var row = folder.querySelector(":scope > button.tree-row");
         if (row) row.setAttribute("aria-expanded", "true");
       }
       var badge = folder.querySelector(":scope > .tree-row .count");
