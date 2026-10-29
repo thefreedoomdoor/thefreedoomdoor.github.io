@@ -1,46 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>三个把我卡住的坑</title>
-    <link rel="stylesheet" type="text/css" href="../sample.css">
-    <link rel="stylesheet" type="text/css" href="../../../css/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>三个把我卡住的坑 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="配置骨架、NO_PROXY、失效节点——都不是配置写错，而是某一层悄悄绕开了。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="三个把我卡住的坑 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="配置骨架、NO_PROXY、失效节点——都不是配置写错，而是某一层悄悄绕开了。">
+<meta property="og:url" content="https://thefreedoomdoor.github.io/inside/blogs/blog/weekly-2026-10-29-pitfalls.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
 </head>
-<body>
-    <div class="nav">
-        <headd>
-          <home>
-              <a href="../../../index.html" class="nav-button">H o m e</a>
-              <a href="../../contact.html" class="nav-button">T e x t</a>
-              <hr>
-          </home>
-        </headd>
+<body class="">
 
-    <bt>三个把我卡住的坑</bt>
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a><a class="nav-link" href="/inside/login.html">Login</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a><a class="nav-link" href="/inside/login.html">Login</a></div>
 
-<zw>2026/10/23 – 10/29</zw>
-
-<content>
-<h2>一、配置文件的骨架骗了我</h2>
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>三个把我卡住的坑</h1>
+        <div class="article-meta">
+          <time datetime="2026-10-29">2026-10-29</time>
+          <span class="dot"></span>
+          <span>482 字 · 1 分钟</span>
+          <span class="dot"></span><span>GitHub · 排障</span>
+        </div>
+        <p class="article-summary">配置骨架、NO_PROXY、失效节点——都不是配置写错，而是某一层悄悄绕开了。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="一-配置文件的骨架骗了我" tabindex="-1">一、配置文件的骨架骗了我</h2>
 <p>第一次直接用 Clash Verge 目录里的 <code>config.yaml</code> 起内核，日志显示一切正常，端口也起来了，可 GitHub 就是打不开。</p>
 <p>原因是那份文件只是运行时骨架，节点列表是空的，所有流量都走了 DIRECT——等于没开代理。真正的节点在 <code>profiles/&lt;uid&gt;.yaml</code> 里，得按 <code>profiles.yaml</code> 的 current 去读，合并之后才能用。</p>
 <p><strong>教训</strong>：看到「启动成功」不等于「能用」，要验证出口。</p>
-
-<h2>二、加了代理参数，curl 还是直连</h2>
+<h2 id="二-加了代理参数-curl-还是直连" tabindex="-1">二、加了代理参数，curl 还是直连</h2>
 <p>现象很迷惑：<code>curl -x http://127.0.0.1:7897 https://github.com</code> 要么 0.25 秒直接返回 000，要么卡到超时。而同一个代理访问 <code>api.github.com</code> 却正常。</p>
-<p>查环境变量才发现，机器上有个 <code>NO_PROXY</code>，值里赫然写着 <code>.github.com,.githubusercontent.com,codeload.github.com</code>——它让 curl 主动绕过代理，专门去直连被墙的域名。改成只排除 localhost 之后一切正常；临时绕过则加 <code>--noproxy ""</code>。</p>
+<p>查环境变量才发现，机器上有个 <code>NO_PROXY</code>，值里赫然写着 <code>.github.com,.githubusercontent.com,codeload.github.com</code>——它让 curl 主动绕过代理，专门去直连被墙的域名。改成只排除 localhost 之后一切正常；临时绕过则加 <code>--noproxy &quot;&quot;</code>。</p>
 <p><strong>教训</strong>：代理不通时先看 <code>no_proxy</code>，它比代理本身更隐蔽。</p>
-
-<h2>三、默认选中的节点是坏的</h2>
+<h2 id="三-默认选中的节点是坏的" tabindex="-1">三、默认选中的节点是坏的</h2>
 <p>订阅里混着一批名字像「官网」「到期」「剩余 75.16 GB」的节点。它们和真实节点指向同一台服务器，但大多已经失效，而分组默认选中的恰恰是第一个。</p>
 <p>解决分两步：生成配置时把这类信息节点排到分组末尾，启动后再对真实节点测一次延迟，自动切到最快的一个，并记住选择。</p>
 <p><strong>教训</strong>：默认值不等于可用值，能自动测就别信默认。</p>
-
-<h2>这三个坑的共同点</h2>
+<h2 id="这三个坑的共同点" tabindex="-1">这三个坑的共同点</h2>
 <p>都不是「配置写错了」，而是「以为配好了，其实某一层悄悄绕开了」。所以每改完一次，我都会用独立的命令验证一次出口，而不是看日志说成功就收工。</p>
-</content>
 
-    <script src="../sample.js"></script>
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly-2026-10-29-workflow.html"><span class="dir">← 上一篇</span> 以后每周五，自动写一篇</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <a href="/inside/blogs/blog/weekly-2026-10-29-accel.html"><span class="dir">下一篇 →</span> 给博客接上 GitHub 加速</a>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E4%B8%80-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%9A%84%E9%AA%A8%E6%9E%B6%E9%AA%97%E4%BA%86%E6%88%91">一、配置文件的骨架骗了我</a></li><li class="toc-h2"><a href="#%E4%BA%8C-%E5%8A%A0%E4%BA%86%E4%BB%A3%E7%90%86%E5%8F%82%E6%95%B0-curl-%E8%BF%98%E6%98%AF%E7%9B%B4%E8%BF%9E">二、加了代理参数，curl 还是直连</a></li><li class="toc-h2"><a href="#%E4%B8%89-%E9%BB%98%E8%AE%A4%E9%80%89%E4%B8%AD%E7%9A%84%E8%8A%82%E7%82%B9%E6%98%AF%E5%9D%8F%E7%9A%84">三、默认选中的节点是坏的</a></li><li class="toc-h2"><a href="#%E8%BF%99%E4%B8%89%E4%B8%AA%E5%9D%91%E7%9A%84%E5%85%B1%E5%90%8C%E7%82%B9">这三个坑的共同点</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+    <span>静态站 · 由本机管理端发布</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
 </body>
 </html>

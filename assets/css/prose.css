@@ -1,0 +1,359 @@
+/* 正文排版（文章页与编辑器预览共用） */
+
+/* ---------- 正文排版 ---------- */
+
+.prose {
+  color: var(--text-2);
+  font-size: var(--fs-md);
+  line-height: 1.85;
+  word-wrap: break-word;
+}
+
+.prose > *:first-child {
+  margin-top: 0;
+}
+
+.prose h2,
+.prose h3,
+.prose h4 {
+  color: var(--text);
+  font-family: var(--font-serif);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  scroll-margin-top: calc(var(--nav-h) + 24px);
+}
+
+.prose h2 {
+  margin: var(--sp-8) 0 var(--sp-4);
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-2xl);
+}
+
+.prose h3 {
+  margin: var(--sp-6) 0 var(--sp-3);
+  font-size: var(--fs-xl);
+}
+
+.prose h4 {
+  margin: var(--sp-5) 0 var(--sp-2);
+  font-size: var(--fs-lg);
+}
+
+.prose p {
+  margin: 0 0 var(--sp-4);
+}
+
+.prose strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.prose ul,
+.prose ol {
+  margin: 0 0 var(--sp-4);
+  padding-left: var(--sp-5);
+}
+
+.prose li {
+  margin-bottom: var(--sp-2);
+}
+
+.prose li::marker {
+  color: var(--accent-line);
+}
+
+.prose a {
+  color: var(--accent-ink);
+  border-bottom: 1px solid rgba(154, 162, 255, 0.35);
+}
+
+.prose a:hover {
+  color: var(--text);
+  border-bottom-color: var(--text);
+}
+
+.prose blockquote {
+  margin: var(--sp-5) 0;
+  padding: var(--sp-3) var(--sp-5);
+  border-left: 2px solid var(--border-strong);
+  background: var(--surface);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  color: var(--text-2);
+}
+
+.prose blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+.prose code {
+  padding: 0.15em 0.4em;
+  border-radius: var(--r-xs);
+  background: var(--surface-3);
+  color: #e6e9f5;
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+}
+
+.prose .code-block {
+  margin: var(--sp-5) 0;
+  border: 1px solid var(--code-border);
+  border-radius: var(--r-md);
+  background: var(--code-bg);
+  overflow: hidden;
+}
+
+.code-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--code-border);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.code-lang {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: var(--tr-wide);
+  text-transform: uppercase;
+}
+
+.code-copy {
+  padding: 3px 9px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-xs);
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+
+.code-copy:hover {
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+.prose .code-block pre {
+  margin: 0;
+  padding: var(--sp-4);
+  overflow-x: auto;
+  background: transparent;
+  font-size: 13.5px;
+  line-height: 1.65;
+}
+
+.prose .code-block code {
+  padding: 0;
+  background: none;
+  font-size: inherit;
+}
+
+.prose .shiki {
+  background: transparent !important;
+}
+
+.prose table {
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+
+.table-wrap {
+  margin: var(--sp-5) 0;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+
+.prose th,
+.prose td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose th {
+  background: var(--surface-2);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.prose tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.prose tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.prose .fig {
+  display: block;
+  margin: var(--sp-5) 0;
+}
+
+.prose .fig img {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+
+.prose .fig-cap {
+  display: block;
+  margin-top: var(--sp-2);
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  text-align: center;
+}
+
+.prose .fig-inline {
+  display: inline-flex;
+  flex-direction: column;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.prose .katex-display {
+  margin: var(--sp-5) 0;
+  padding: var(--sp-3) 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.prose .katex {
+  font-size: 1.05em;
+}
+
+.prose .callout {
+  margin: var(--sp-5) 0;
+  padding: var(--sp-4) var(--sp-5);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  background: var(--surface);
+}
+
+.prose .callout-title {
+  display: block;
+  margin-bottom: var(--sp-2);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tr-wide);
+  text-transform: uppercase;
+}
+
+.prose .callout > :last-child {
+  margin-bottom: 0;
+}
+
+.prose .callout-warning {
+  border-left-color: var(--amber);
+}
+.prose .callout-warning .callout-title {
+  color: var(--amber);
+}
+.prose .callout-danger {
+  border-left-color: var(--red);
+}
+.prose .callout-danger .callout-title {
+  color: var(--red);
+}
+.prose .callout-tip {
+  border-left-color: var(--green);
+}
+.prose .callout-tip .callout-title {
+  color: var(--green);
+}
+
+.prose .theorem {
+  margin: var(--sp-5) 0;
+  padding: var(--sp-4) var(--sp-5);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  background: var(--bg-elev);
+}
+
+.prose .theorem-title {
+  margin: 0 0 var(--sp-2);
+  color: var(--accent-ink);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+.prose .footnotes {
+  margin-top: var(--sp-8);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+.prose .footnotes-sep {
+  display: none;
+}
+
+.prose .footnote-ref a {
+  border: 0;
+  font-size: 0.72em;
+  vertical-align: super;
+}
+
+.prose .bibtex {
+  margin: var(--sp-5) 0;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.prose .bibtex summary {
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.prose .bibtex pre {
+  margin: 0;
+  padding: var(--sp-4);
+  overflow-x: auto;
+  background: var(--code-bg);
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+.prose input[type="checkbox"] {
+  accent-color: var(--accent);
+  margin-right: 6px;
+}
+
+/* 内联颜色 */
+.hl-red { color: var(--red); }
+.hl-amber { color: var(--amber); }
+.hl-green { color: var(--green); }
+.hl-blue { color: var(--blue); }
+.hl-purple { color: var(--purple); }
+.hl-cyan { color: var(--cyan); }
+
+mark {
+  background: rgba(242, 196, 109, 0.22);
+  color: var(--text);
+  padding: 0 2px;
+  border-radius: 2px;
+}

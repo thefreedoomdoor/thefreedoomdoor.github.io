@@ -1,29 +1,60 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <title>thefreedomdoor's blog</title>
-  <link rel="stylesheet" type="text/css" href="css/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>thefreedomdoor&#39;s blog</title>
+<meta name="description" content="写代码、读论文、偶尔折腾博客。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="thefreedomdoor&#39;s blog">
+<meta property="og:description" content="写代码、读论文、偶尔折腾博客。">
+<meta property="og:url" content="https://thefreedoomdoor.github.io/">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+
 
 </head>
-<body>
-  <div class="nav">
-  <headd>
-    <home>
+<body class="">
 
-        <a href="index.html" class="nav-button">H o m e</a>
-        <a href="inside\contact.html" class="nav-button">T e x t</a>
-        <hr>
-    </home>
-  </headd>
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/" aria-current="page">Home</a><a class="nav-link" href="/inside/blog.html">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a><a class="nav-link" href="/inside/login.html">Login</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
   </div>
-  <div class="movedel">
-  <main>
-    <h1>
-      <span id="text" data-text='["Welcome to my blog!","海内存知己","こんにちは、私のブログへようこそ！","天涯若比邻","欢迎来到我的博客！","主页正在构建中..."]' class="mark"></span>
-    </h1>
-  </main>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/" aria-current="page">Home</a><a class="nav-link" href="/inside/blog.html">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a><a class="nav-link" href="/inside/login.html">Login</a></div>
+
+<main class="hero">
+  <div class="hero-inner">
+    <p class="kicker">NOTES / 随笔</p>
+    <h1 class="hero-title"><span id="typewriter" data-text='["Welcome to my blog!","海内存知己","こんにちは、私のブログへようこそ！","天涯若比邻","欢迎来到我的博客！","主页正在构建中..."]'>Welcome to my blog!</span><span class="caret" aria-hidden="true"></span></h1>
+    <p class="hero-sub">写代码、读论文、偶尔折腾博客。这里记录做过的事、踩过的坑，和还没想明白的问题。</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="/inside/blog.html">阅读博客</a>
+      <a class="btn btn-ghost" href="/inside/about.html">关于我</a>
+    </div>
+    <div class="hero-meta">
+      <span>4 篇文章</span>
+      <span>最后更新 2026-10-29</span>
+      <span></span>
+    </div>
+    <p class="hero-hint">scroll <span>↓</span></p>
   </div>
-  <script src="js\index.js"></script>
-  
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+    <span>静态站 · 由本机管理端发布</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/hero.js" defer></script>
 </body>
+</html>

@@ -1,0 +1,47 @@
+[
+  {
+    "title": "给博客接上 GitHub 加速",
+    "url": "/inside/blogs/blog/weekly-2026-10-29-accel.html",
+    "date": "2026-10-29",
+    "tags": [
+      "GitHub",
+      "代理"
+    ],
+    "folder": [],
+    "pin": false,
+    "summary": "直连超时的机器上，把浏览器、拉取和推送三条通道分别修好。"
+  },
+  {
+    "title": "三个把我卡住的坑",
+    "url": "/inside/blogs/blog/weekly-2026-10-29-pitfalls.html",
+    "date": "2026-10-29",
+    "tags": [
+      "GitHub",
+      "排障"
+    ],
+    "folder": [],
+    "pin": false,
+    "summary": "配置骨架、NO_PROXY、失效节点——都不是配置写错，而是某一层悄悄绕开了。"
+  },
+  {
+    "title": "以后每周五，自动写一篇",
+    "url": "/inside/blogs/blog/weekly-2026-10-29-workflow.html",
+    "date": "2026-10-29",
+    "tags": [
+      "自动化",
+      "写作"
+    ],
+    "folder": [],
+    "pin": false,
+    "summary": "用证据清单代替回忆，让每周总结自己长出来。"
+  },
+  {
+    "title": "这是我的第一个博客文章",
+    "url": "/inside/blogs/blog/hello_world.html",
+    "date": "2024-11-30",
+    "tags": [],
+    "folder": [],
+    "pin": false,
+    "summary": "2024 年冬天写下的第一句话。"
+  }
+]

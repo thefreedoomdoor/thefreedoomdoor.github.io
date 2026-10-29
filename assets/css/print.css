@@ -1,0 +1,97 @@
+/* 打印 / 导出 PDF：只留正文 */
+@media print {
+  body::before,
+  body::after,
+  .site-nav,
+  .mobile-menu,
+  .toc,
+  .site-foot,
+  .article-foot,
+  .code-copy,
+  .hero-hint {
+    display: none !important;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .article-page {
+    padding: 0 !important;
+  }
+
+  .article-shell {
+    display: block !important;
+    max-width: none !important;
+  }
+
+  .article-head,
+  .article-head h1,
+  .prose,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose strong {
+    color: #000 !important;
+  }
+
+  .article-head {
+    border-bottom: 1px solid #999;
+  }
+
+  .article-head h1 {
+    font-size: 20pt;
+  }
+
+  .prose {
+    font-size: 12pt;
+    line-height: 1.55;
+  }
+
+  .prose a {
+    color: #000 !important;
+    border-bottom: 0 !important;
+  }
+
+  .prose a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 8.5pt;
+    color: #555;
+  }
+
+  .prose .code-block,
+  .prose .callout,
+  .prose .theorem,
+  .table-wrap,
+  .prose blockquote {
+    border: 1px solid #bbb !important;
+    background: #fff !important;
+  }
+
+  .prose .shiki,
+  .prose .shiki span {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .prose .code-block pre {
+    white-space: pre-wrap;
+  }
+
+  .prose .katex {
+    color: #000 !important;
+  }
+
+  .prose h2,
+  .prose h3 {
+    page-break-after: avoid;
+  }
+
+  .prose figure,
+  .prose .fig,
+  .prose table {
+    page-break-inside: avoid;
+  }
+}

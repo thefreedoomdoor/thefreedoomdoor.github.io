@@ -1,47 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>给博客接上 GitHub 加速</title>
-    <link rel="stylesheet" type="text/css" href="../sample.css">
-    <link rel="stylesheet" type="text/css" href="../../../css/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>给博客接上 GitHub 加速 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="直连超时的机器上，把浏览器、拉取和推送三条通道分别修好。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="给博客接上 GitHub 加速 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="直连超时的机器上，把浏览器、拉取和推送三条通道分别修好。">
+<meta property="og:url" content="https://thefreedoomdoor.github.io/inside/blogs/blog/weekly-2026-10-29-accel.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
 </head>
-<body>
-    <div class="nav">
-        <headd>
-          <home>
-              <a href="../../../index.html" class="nav-button">H o m e</a>
-              <a href="../../contact.html" class="nav-button">T e x t</a>
-              <hr>
-          </home>
-        </headd>
+<body class="">
 
-    <bt>给博客接上 GitHub 加速</bt>
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a><a class="nav-link" href="/inside/login.html">Login</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a><a class="nav-link" href="/inside/login.html">Login</a></div>
 
-<zw>2026/10/23 – 10/29</zw>
-
-<content>
-<h2>为什么要弄这个</h2>
-<p>这台机器直连 github.com 是超时的：DNS 能解析，TCP 连不上。每次想改博客，光是拉取和推送就要折腾半天。所以这一周先把路修好，目标很简单——浏览器能打开 GitHub，<code>git push</code> 能一次成功。</p>
-
-<h2>三条通道，各走各的</h2>
-<p>诊断下来，被封的其实只是 github.com 本身：<code>api.github.com</code> 和 <code>ssh.github.com:443</code> 都是通的。于是把不同用途拆开：</p>
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>给博客接上 GitHub 加速</h1>
+        <div class="article-meta">
+          <time datetime="2026-10-29">2026-10-29</time>
+          <span class="dot"></span>
+          <span>439 字 · 1 分钟</span>
+          <span class="dot"></span><span>GitHub · 代理</span>
+        </div>
+        <p class="article-summary">直连超时的机器上，把浏览器、拉取和推送三条通道分别修好。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="为什么要弄这个" tabindex="-1">为什么要弄这个</h2>
+<p>这台机器直连 <a href="http://github.com">github.com</a> 是超时的：DNS 能解析，TCP 连不上。每次想改博客，光是拉取和推送就要折腾半天。所以这一周先把路修好，目标很简单——浏览器能打开 GitHub，<code>git push</code> 能一次成功。</p>
+<h2 id="三条通道-各走各的" tabindex="-1">三条通道，各走各的</h2>
+<p>诊断下来，被封的其实只是 <a href="http://github.com">github.com</a> 本身：<code>api.github.com</code> 和 <code>ssh.github.com:443</code> 都是通的。于是把不同用途拆开：</p>
 <ul>
-    <li><strong>浏览器</strong>：起一个本地代理（mixed 端口 7897），再把 Windows 系统代理指过去。</li>
-    <li><strong>推送</strong>：origin 改成 SSH 地址，复用已有的 <code>~/.ssh/config</code>，实际走 ssh.github.com 的 443 端口，不需要 token。</li>
-    <li><strong>拉取</strong>：给 git 单独配了 github.com 走本地代理，HTTPS 地址也能直接 clone。</li>
+<li><strong>浏览器</strong>：起一个本地代理（mixed 端口 7897），再把 Windows 系统代理指过去。</li>
+<li><strong>推送</strong>：origin 改成 SSH 地址，复用已有的 <code>~/.ssh/config</code>，实际走 <a href="http://ssh.github.com">ssh.github.com</a> 的 443 端口，不需要 token。</li>
+<li><strong>拉取</strong>：给 git 单独配了 <a href="http://github.com">github.com</a> 走本地代理，HTTPS 地址也能直接 clone。</li>
 </ul>
 <p>另外加了一个 <code>mirror</code> 远程指向 gh-proxy，代理没开的时候还能用镜像兜底。</p>
-
-<h2>代理本身怎么来的</h2>
+<h2 id="代理本身怎么来的" tabindex="-1">代理本身怎么来的</h2>
 <p>机器上装了 Clash Verge，但没有运行，而且它目录里的 <code>config.yaml</code> 只是运行时骨架，里面根本没有节点。真正的节点在当前订阅文件里。所以做法不是去改 Verge，而是读它的订阅、合并出一份独立配置，单独起一个内核，用完即停，互不干扰。</p>
-
-<h2>结果</h2>
+<h2 id="结果" tabindex="-1">结果</h2>
 <p>现在 <code>github.com</code> 返回 200，<code>git push --dry-run</code> 正常协商，HTTPS 克隆也跑通了。速度取决于订阅线路，实测在几十到一百多 KB/s，对一个小博客仓库够用。</p>
 <p>代价是启动多了一步：用之前先跑一下启动脚本，它会自动测速挑节点、打开系统代理。它和 Clash Verge 抢同一个端口，所以两者不能同时开，这点已经写进脚本说明里了。</p>
-</content>
 
-    <script src="../sample.js"></script>
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly-2026-10-29-pitfalls.html"><span class="dir">← 上一篇</span> 三个把我卡住的坑</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <span></span>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%BC%84%E8%BF%99%E4%B8%AA">为什么要弄这个</a></li><li class="toc-h2"><a href="#%E4%B8%89%E6%9D%A1%E9%80%9A%E9%81%93-%E5%90%84%E8%B5%B0%E5%90%84%E7%9A%84">三条通道，各走各的</a></li><li class="toc-h2"><a href="#%E4%BB%A3%E7%90%86%E6%9C%AC%E8%BA%AB%E6%80%8E%E4%B9%88%E6%9D%A5%E7%9A%84">代理本身怎么来的</a></li><li class="toc-h2"><a href="#%E7%BB%93%E6%9E%9C">结果</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+    <span>静态站 · 由本机管理端发布</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
 </body>
 </html>

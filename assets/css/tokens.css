@@ -1,0 +1,112 @@
+/* ===========================================================
+   设计 token —— 暗色技术风
+   近黑底、单一靛蓝强调、细描边、克制的光晕
+   =========================================================== */
+
+:root {
+  color-scheme: dark;
+
+  /* 背景层次 */
+  --bg: #08090a;
+  --bg-elev: #0d0e10;
+  --surface: #121316;
+  --surface-2: #181a1e;
+  --surface-3: #1f2227;
+
+  /* 描边 */
+  --border: rgba(255, 255, 255, 0.075);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  /* 文字 */
+  --text: #f2f4f8;
+  --text-2: #b3b9c4;
+  --text-muted: #8a8f98;
+
+  /* 强调色 */
+  --accent: #6e79ff;
+  --accent-ink: #9aa2ff;
+  --accent-soft: rgba(110, 121, 255, 0.12);
+  --accent-line: rgba(110, 121, 255, 0.45);
+  --on-accent: #ffffff;
+
+  /* 语义色（暗底对比度均 ≥ 4.5:1） */
+  --red: #ff8f8f;
+  --amber: #f2c46d;
+  --green: #7ddca4;
+  --blue: #7cc4ff;
+  --purple: #c4a7ff;
+  --cyan: #7fe3e0;
+
+  --code-bg: #0b0c0e;
+  --code-border: rgba(255, 255, 255, 0.08);
+  --selection: rgba(110, 121, 255, 0.3);
+
+  /* 字体 */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-serif: "Source Serif 4", "Noto Serif SC", "Songti SC", Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Consolas,
+    "Liberation Mono", monospace;
+
+  /* 字号阶梯 */
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-base: 16px;
+  --fs-md: 17px;
+  --fs-lg: 18px;
+  --fs-xl: 22px;
+  --fs-2xl: 28px;
+  --fs-3xl: 36px;
+  --fs-4xl: 48px;
+  --fs-hero: clamp(44px, 7vw, 88px);
+
+  --lh-tight: 1.1;
+  --lh-snug: 1.3;
+  --lh-body: 1.75;
+  --tr-display: -0.035em;
+  --tr-tight: -0.015em;
+  --tr-wide: 0.12em;
+
+  /* 间距 */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+  --sp-9: 96px;
+  --sp-10: 128px;
+
+  /* 形状 */
+  --r-xs: 4px;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 24px;
+  --r-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.07);
+  --glow-accent: 0 0 0 1px rgba(110, 121, 255, 0.28), 0 8px 32px rgba(110, 121, 255, 0.16);
+
+  /* 动效 */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 120ms;
+  --dur: 200ms;
+  --dur-slow: 320ms;
+
+  /* 布局 */
+  --w-page: 1200px;
+  --w-article: 720px;
+  --w-toc: 240px;
+  --nav-h: 64px;
+}
+
+@media (max-width: 760px) {
+  :root {
+    --nav-h: 56px;
+  }
+}

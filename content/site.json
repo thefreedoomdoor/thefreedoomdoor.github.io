@@ -1,0 +1,33 @@
+{
+  "site": {
+    "title": "thefreedomdoor's blog",
+    "description": "写代码、读论文、偶尔折腾博客。",
+    "url": "https://thefreedoomdoor.github.io",
+    "author": "thefreedomdoor"
+  },
+  "home": {
+    "kicker": "NOTES / 随笔",
+    "subtitle": "写代码、读论文、偶尔折腾博客。这里记录做过的事、踩过的坑，和还没想明白的问题。",
+    "slogans": [
+      "Welcome to my blog!",
+      "海内存知己",
+      "こんにちは、私のブログへようこそ！",
+      "天涯若比邻",
+      "欢迎来到我的博客！",
+      "主页正在构建中..."
+    ]
+  },
+  "blog": {
+    "rootLabel": "documents"
+  },
+  "about": {
+    "name": "thefreedomdoor",
+    "tagline": "写代码 · 读论文 · 折腾博客",
+    "bio": "个人博客，记录技术、阅读和日常。",
+    "avatar": "",
+    "email": "",
+    "github": "https://github.com/thefreedoomdoor",
+    "gitcode": "",
+    "projects": []
+  }
+}

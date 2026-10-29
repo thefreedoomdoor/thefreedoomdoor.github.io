@@ -1,51 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>以后每周五，自动写一篇</title>
-    <link rel="stylesheet" type="text/css" href="../sample.css">
-    <link rel="stylesheet" type="text/css" href="../../../css/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>以后每周五，自动写一篇 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="用证据清单代替回忆，让每周总结自己长出来。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="以后每周五，自动写一篇 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="用证据清单代替回忆，让每周总结自己长出来。">
+<meta property="og:url" content="https://thefreedoomdoor.github.io/inside/blogs/blog/weekly-2026-10-29-workflow.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
 </head>
-<body>
-    <div class="nav">
-        <headd>
-          <home>
-              <a href="../../../index.html" class="nav-button">H o m e</a>
-              <a href="../../contact.html" class="nav-button">T e x t</a>
-              <hr>
-          </home>
-        </headd>
+<body class="">
 
-    <bt>以后每周五，自动写一篇</bt>
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a><a class="nav-link" href="/inside/login.html">Login</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a><a class="nav-link" href="/inside/login.html">Login</a></div>
 
-<zw>2026/10/23 – 10/29</zw>
-
-<content>
-<h2>起因</h2>
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>以后每周五，自动写一篇</h1>
+        <div class="article-meta">
+          <time datetime="2026-10-29">2026-10-29</time>
+          <span class="dot"></span>
+          <span>433 字 · 1 分钟</span>
+          <span class="dot"></span><span>自动化 · 写作</span>
+        </div>
+        <p class="article-summary">用证据清单代替回忆，让每周总结自己长出来。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="起因" tabindex="-1">起因</h2>
 <p>博客建好很久，文章只有一篇 hello_world。不是没做事，而是做完就过去了，没留下记录。所以想把「记录」这一步也自动化：每周五晚上，让程序自己整理这一周，写成文章发出去。</p>
-
-<h2>素材从哪来</h2>
+<h2 id="素材从哪来" tabindex="-1">素材从哪来</h2>
 <p>不靠回忆，靠痕迹。写了一个采集脚本，只读不写，汇总四类东西：</p>
 <ul>
-    <li>这一周的 git 提交和涉及的文件</li>
-    <li>工作区里最近七天改动过的文件</li>
-    <li>踩坑记录里按日期新增的条目</li>
-    <li>这一周新写入的长期记忆</li>
+<li>这一周的 git 提交和涉及的文件</li>
+<li>工作区里最近七天改动过的文件</li>
+<li>踩坑记录里按日期新增的条目</li>
+<li>这一周新写入的长期记忆</li>
 </ul>
 <p>脚本输出的是一份「证据清单」，每一条都能追溯到具体文件和提交。写文章时只能引用清单里的内容，不能自由发挥——这是防止自动生成内容变成空话的关键。</p>
-
-<h2>我自己还能补一句</h2>
+<h2 id="我自己还能补一句" tabindex="-1">我自己还能补一句</h2>
 <p>工作区记不下的东西，比如读的书、见的人、临时想法，可以写进一个补充文件，一行一件。自动总结会把它当作真实素材采纳，这个文件不进仓库。</p>
-
-<h2>发布流程</h2>
+<h2 id="发布流程" tabindex="-1">发布流程</h2>
 <p>素材够了就按主题拆成一篇到几篇，每篇自动生成页面、登记到文章目录，本地起服务确认返回 200，然后提交、推送。Pages 一两分钟后就更新了。</p>
 <p>如果这一周确实什么都没发生，程序不会硬写，它会直接跳过并说明。宁可空一周，也不发没有信息量的文章。</p>
-
-<h2>下一次</h2>
+<h2 id="下一次" tabindex="-1">下一次</h2>
 <p>第一次定时执行在周五晚上八点。这一期是手动先发的样刊，用来确认从采集、写作到发布推送这条链路能走通。</p>
-</content>
 
-    <script src="../sample.js"></script>
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/hello_world.html"><span class="dir">← 上一篇</span> 这是我的第一个博客文章</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <a href="/inside/blogs/blog/weekly-2026-10-29-pitfalls.html"><span class="dir">下一篇 →</span> 三个把我卡住的坑</a>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E8%B5%B7%E5%9B%A0">起因</a></li><li class="toc-h2"><a href="#%E7%B4%A0%E6%9D%90%E4%BB%8E%E5%93%AA%E6%9D%A5">素材从哪来</a></li><li class="toc-h2"><a href="#%E6%88%91%E8%87%AA%E5%B7%B1%E8%BF%98%E8%83%BD%E8%A1%A5%E4%B8%80%E5%8F%A5">我自己还能补一句</a></li><li class="toc-h2"><a href="#%E5%8F%91%E5%B8%83%E6%B5%81%E7%A8%8B">发布流程</a></li><li class="toc-h2"><a href="#%E4%B8%8B%E4%B8%80%E6%AC%A1">下一次</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+    <span>静态站 · 由本机管理端发布</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
 </body>
 </html>

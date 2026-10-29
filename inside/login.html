@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>管理员入口 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="管理员入口说明">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="管理员入口 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="管理员入口说明">
+<meta property="og:url" content="https://thefreedoomdoor.github.io/inside/login.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a><a class="nav-link" href="/inside/login.html" aria-current="page">Login</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a><a class="nav-link" href="/inside/login.html" aria-current="page">Login</a></div>
+
+<main class="page">
+  <div class="page-inner">
+    <div class="login-card">
+      <p class="kicker">ADMIN / 管理</p>
+      <h1>管理员入口</h1>
+      <p>本站托管在 GitHub Pages 上，只有静态文件，没有服务器。因此这里不提供账号密码登录——任何写进网页的凭据都等于公开。</p>
+
+      <div class="notice remote-only" style="margin-bottom:var(--sp-5)">
+        <strong>当前是公开站点。</strong>管理功能不在网页端，请在本机打开 Electron 管理端（<code>_tools/admin</code>）完成写作与发布。
+      </div>
+
+      <div class="local-only" style="flex-direction:column;gap:var(--sp-3);margin-bottom:var(--sp-5)">
+        <div class="notice"><strong>本机预览环境。</strong>管理端已在本机运行，直接回到管理端窗口即可编辑。</div>
+        <a class="btn btn-primary" href="http://127.0.0.1:4173/" target="_blank" rel="noopener">打开管理端预览</a>
+      </div>
+
+      <ol class="steps">
+        <li>打开本机管理端，输入本地管理密码解锁。</li>
+        <li>在「文章」里新建或编辑，编辑器右侧实时预览。</li>
+        <li>在「站点设置」里调整首页标语与 ContactMe 信息。</li>
+        <li>点「发布」，管理端会构建、提交并推送到 GitHub。</li>
+        <li>GitHub Pages 自动更新，通常一到两分钟。</li>
+      </ol>
+
+      <p class="mono" style="margin:0">没有网页端登录，也没有可被窃取的网页凭据。</p>
+    </div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+    <span>静态站 · 由本机管理端发布</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+
+</body>
+</html>
