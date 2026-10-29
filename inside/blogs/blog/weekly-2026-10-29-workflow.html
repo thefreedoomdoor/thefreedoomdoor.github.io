@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>以后每周五，自动写一篇</title>
+    <link rel="stylesheet" type="text/css" href="../sample.css">
+    <link rel="stylesheet" type="text/css" href="../../../css/style.css">
+</head>
+<body>
+    <div class="nav">
+        <headd>
+          <home>
+              <a href="../../../index.html" class="nav-button">H o m e</a>
+              <a href="../../contact.html" class="nav-button">T e x t</a>
+              <hr>
+          </home>
+        </headd>
+
+    <bt>以后每周五，自动写一篇</bt>
+
+<zw>2026/10/23 – 10/29</zw>
+
+<content>
+<h2>起因</h2>
+<p>博客建好很久，文章只有一篇 hello_world。不是没做事，而是做完就过去了，没留下记录。所以想把「记录」这一步也自动化：每周五晚上，让程序自己整理这一周，写成文章发出去。</p>
+
+<h2>素材从哪来</h2>
+<p>不靠回忆，靠痕迹。写了一个采集脚本，只读不写，汇总四类东西：</p>
+<ul>
+    <li>这一周的 git 提交和涉及的文件</li>
+    <li>工作区里最近七天改动过的文件</li>
+    <li>踩坑记录里按日期新增的条目</li>
+    <li>这一周新写入的长期记忆</li>
+</ul>
+<p>脚本输出的是一份「证据清单」，每一条都能追溯到具体文件和提交。写文章时只能引用清单里的内容，不能自由发挥——这是防止自动生成内容变成空话的关键。</p>
+
+<h2>我自己还能补一句</h2>
+<p>工作区记不下的东西，比如读的书、见的人、临时想法，可以写进一个补充文件，一行一件。自动总结会把它当作真实素材采纳，这个文件不进仓库。</p>
+
+<h2>发布流程</h2>
+<p>素材够了就按主题拆成一篇到几篇，每篇自动生成页面、登记到文章目录，本地起服务确认返回 200，然后提交、推送。Pages 一两分钟后就更新了。</p>
+<p>如果这一周确实什么都没发生，程序不会硬写，它会直接跳过并说明。宁可空一周，也不发没有信息量的文章。</p>
+
+<h2>下一次</h2>
+<p>第一次定时执行在周五晚上八点。这一期是手动先发的样刊，用来确认从采集、写作到发布推送这条链路能走通。</p>
+</content>
+
+    <script src="../sample.js"></script>
+</body>
+</html>

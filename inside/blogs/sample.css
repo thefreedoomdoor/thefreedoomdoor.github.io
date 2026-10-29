@@ -64,3 +64,53 @@ a{
   background-color: blach; /* 背景颜色 */
   border-radius: 5px; /* 圆角边框 */
 }
+
+/* 正文容器：背景图上的文字需要一块浅色底板才看得清 */
+content {
+    display: block;
+    width: min(760px, 86vw);
+    margin: 0 auto 80px;
+    padding: 32px 40px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    color: #1a1a1a;
+    font-size: 17px;
+    line-height: 1.9;
+    text-align: left;
+}
+
+content h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #111;
+    margin: 28px 0 10px;
+}
+
+content h2:first-child {
+    margin-top: 0;
+}
+
+content p {
+    margin: 0 0 14px;
+}
+
+content ul {
+    margin: 0 0 14px;
+    padding-left: 24px;
+}
+
+content li {
+    margin-bottom: 6px;
+}
+
+content strong {
+    font-weight: 600;
+}
+
+content code {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 15px;
+    background-color: rgba(0, 0, 0, 0.06);
+    padding: 1px 5px;
+    border-radius: 3px;
+}

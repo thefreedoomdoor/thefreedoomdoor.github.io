@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三个把我卡住的坑</title>
+    <link rel="stylesheet" type="text/css" href="../sample.css">
+    <link rel="stylesheet" type="text/css" href="../../../css/style.css">
+</head>
+<body>
+    <div class="nav">
+        <headd>
+          <home>
+              <a href="../../../index.html" class="nav-button">H o m e</a>
+              <a href="../../contact.html" class="nav-button">T e x t</a>
+              <hr>
+          </home>
+        </headd>
+
+    <bt>三个把我卡住的坑</bt>
+
+<zw>2026/10/23 – 10/29</zw>
+
+<content>
+<h2>一、配置文件的骨架骗了我</h2>
+<p>第一次直接用 Clash Verge 目录里的 <code>config.yaml</code> 起内核，日志显示一切正常，端口也起来了，可 GitHub 就是打不开。</p>
+<p>原因是那份文件只是运行时骨架，节点列表是空的，所有流量都走了 DIRECT——等于没开代理。真正的节点在 <code>profiles/&lt;uid&gt;.yaml</code> 里，得按 <code>profiles.yaml</code> 的 current 去读，合并之后才能用。</p>
+<p><strong>教训</strong>：看到「启动成功」不等于「能用」，要验证出口。</p>
+
+<h2>二、加了代理参数，curl 还是直连</h2>
+<p>现象很迷惑：<code>curl -x http://127.0.0.1:7897 https://github.com</code> 要么 0.25 秒直接返回 000，要么卡到超时。而同一个代理访问 <code>api.github.com</code> 却正常。</p>
+<p>查环境变量才发现，机器上有个 <code>NO_PROXY</code>，值里赫然写着 <code>.github.com,.githubusercontent.com,codeload.github.com</code>——它让 curl 主动绕过代理，专门去直连被墙的域名。改成只排除 localhost 之后一切正常；临时绕过则加 <code>--noproxy ""</code>。</p>
+<p><strong>教训</strong>：代理不通时先看 <code>no_proxy</code>，它比代理本身更隐蔽。</p>
+
+<h2>三、默认选中的节点是坏的</h2>
+<p>订阅里混着一批名字像「官网」「到期」「剩余 75.16 GB」的节点。它们和真实节点指向同一台服务器，但大多已经失效，而分组默认选中的恰恰是第一个。</p>
+<p>解决分两步：生成配置时把这类信息节点排到分组末尾，启动后再对真实节点测一次延迟，自动切到最快的一个，并记住选择。</p>
+<p><strong>教训</strong>：默认值不等于可用值，能自动测就别信默认。</p>
+
+<h2>这三个坑的共同点</h2>
+<p>都不是「配置写错了」，而是「以为配好了，其实某一层悄悄绕开了」。所以每改完一次，我都会用独立的命令验证一次出口，而不是看日志说成功就收工。</p>
+</content>
+
+    <script src="../sample.js"></script>
+</body>
+</html>

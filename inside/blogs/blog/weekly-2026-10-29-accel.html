@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>给博客接上 GitHub 加速</title>
+    <link rel="stylesheet" type="text/css" href="../sample.css">
+    <link rel="stylesheet" type="text/css" href="../../../css/style.css">
+</head>
+<body>
+    <div class="nav">
+        <headd>
+          <home>
+              <a href="../../../index.html" class="nav-button">H o m e</a>
+              <a href="../../contact.html" class="nav-button">T e x t</a>
+              <hr>
+          </home>
+        </headd>
+
+    <bt>给博客接上 GitHub 加速</bt>
+
+<zw>2026/10/23 – 10/29</zw>
+
+<content>
+<h2>为什么要弄这个</h2>
+<p>这台机器直连 github.com 是超时的：DNS 能解析，TCP 连不上。每次想改博客，光是拉取和推送就要折腾半天。所以这一周先把路修好，目标很简单——浏览器能打开 GitHub，<code>git push</code> 能一次成功。</p>
+
+<h2>三条通道，各走各的</h2>
+<p>诊断下来，被封的其实只是 github.com 本身：<code>api.github.com</code> 和 <code>ssh.github.com:443</code> 都是通的。于是把不同用途拆开：</p>
+<ul>
+    <li><strong>浏览器</strong>：起一个本地代理（mixed 端口 7897），再把 Windows 系统代理指过去。</li>
+    <li><strong>推送</strong>：origin 改成 SSH 地址，复用已有的 <code>~/.ssh/config</code>，实际走 ssh.github.com 的 443 端口，不需要 token。</li>
+    <li><strong>拉取</strong>：给 git 单独配了 github.com 走本地代理，HTTPS 地址也能直接 clone。</li>
+</ul>
+<p>另外加了一个 <code>mirror</code> 远程指向 gh-proxy，代理没开的时候还能用镜像兜底。</p>
+
+<h2>代理本身怎么来的</h2>
+<p>机器上装了 Clash Verge，但没有运行，而且它目录里的 <code>config.yaml</code> 只是运行时骨架，里面根本没有节点。真正的节点在当前订阅文件里。所以做法不是去改 Verge，而是读它的订阅、合并出一份独立配置，单独起一个内核，用完即停，互不干扰。</p>
+
+<h2>结果</h2>
+<p>现在 <code>github.com</code> 返回 200，<code>git push --dry-run</code> 正常协商，HTTPS 克隆也跑通了。速度取决于订阅线路，实测在几十到一百多 KB/s，对一个小博客仓库够用。</p>
+<p>代价是启动多了一步：用之前先跑一下启动脚本，它会自动测速挑节点、打开系统代理。它和 Clash Verge 抢同一个端口，所以两者不能同时开，这点已经写进脚本说明里了。</p>
+</content>
+
+    <script src="../sample.js"></script>
+</body>
+</html>
