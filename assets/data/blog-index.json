@@ -1,5 +1,64 @@
 [
   {
+    "title": "2026-10-23 – 10-30 周记：概览",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-10-30-overview.html",
+    "date": "2026-10-30",
+    "tags": [
+      "周记",
+      "项目"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "十五个活跃项目、二十二段会话，这周分成内容生产、系统维护与自动化三条线。"
+  },
+  {
+    "title": "系统与工具：清盘、修网、搭桥",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-10-30-tooling.html",
+    "date": "2026-10-30",
+    "tags": [
+      "系统维护",
+      "排障",
+      "插件"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "清盘、清理 PATH、修 Clash、处理插件市场被拒——这周的系统类问题都按同一套可回滚的流程处理。"
+  },
+  {
+    "title": "danimation：从工作流重构到一条成片",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-10-30-danimation.html",
+    "date": "2026-10-30",
+    "tags": [
+      "danimation",
+      "工作流",
+      "踩坑"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "重构 cinematic 工作流，接通 hyperframes 与 openDAW，并交付一条完整成片；顺手记下四个坑。"
+  },
+  {
+    "title": "QQbot 与量化：把自动化做得更可靠",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-10-30-qqbot-quant.html",
+    "date": "2026-10-30",
+    "tags": [
+      "QQbot",
+      "量化",
+      "自动化"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "机器人这周主要补边界：权限、命令守卫、转发自检；量化平台先把日报跑稳。"
+  },
+  {
     "title": "给博客接上 GitHub 加速",
     "url": "/inside/blogs/blog/weekly-2026-10-29-accel.html",
     "date": "2026-10-29",

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>系统与工具：清盘、修网、搭桥 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="清盘、清理 PATH、修 Clash、处理插件市场被拒——这周的系统类问题都按同一套可回滚的流程处理。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="系统与工具：清盘、修网、搭桥 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="清盘、清理 PATH、修 Clash、处理插件市场被拒——这周的系统类问题都按同一套可回滚的流程处理。">
+<meta property="og:url" content="https://thefreedoomdoor.github.io/inside/blogs/blog/weekly/weekly-2026-10-30-tooling.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a><a class="nav-link" href="/inside/login.html">Login</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a><a class="nav-link" href="/inside/login.html">Login</a></div>
+
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>系统与工具：清盘、修网、搭桥</h1>
+        <div class="article-meta">
+          <time datetime="2026-10-30">2026-10-30</time>
+          <span class="dot"></span>
+          <span>445 字 · 1 分钟</span>
+          <span class="dot"></span><span>系统维护 · 排障 · 插件</span>
+        </div>
+        <p class="article-summary">清盘、清理 PATH、修 Clash、处理插件市场被拒——这周的系统类问题都按同一套可回滚的流程处理。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="清盘" tabindex="-1">清盘</h2>
+<p>C 盘空间紧张，先用 WizTree 扫了一遍。扫描本身很慢，索性把「分析」和「执行」拆开：先出一份占用清单，再写 DISM 清理脚本，脚本跑之前保留日志。这样即使清错了，也知道动了什么。</p>
+<p>同一类工作还有 Windows PATH：变量越堆越长，接近长度上限。做法是先导出原始值备份，再用脚本过滤掉不存在的路径，生成新旧两份清单对照，确认无误后再应用。</p>
+<h2 id="修网" tabindex="-1">修网</h2>
+<p>这周处理了两个 Clash 相关的毛病。一个是访问不了 <a href="http://google.com">google.com</a>，用 hosts 检查和探测脚本逐步定位；另一个是 Clash Verge 起不来，最后查到是 ProgramData 的 ACL 有问题，修好权限后正常。</p>
+<p>插件市场那边也踩了一次：添加 GitHub 仓库被拒。原因有两个叠加——市场源只认 <code>owner/repo</code> 两段路径，贴带 <code>/tree/main</code> 的完整链接直接判非法；同时用户级代理变量指向一个并没有在监听的端口，导致所有出网请求连接被拒。把地址改成两段式、清掉失效的代理变量，再重启客户端，才恢复。</p>
+<h2 id="搭桥" tabindex="-1">搭桥</h2>
+<p>agent-procedures 这个项目在做 DSH 到 ZCode 的桥接：把 DSH 的能力包装成插件，包括市场查询和检查脚本。另一个工作区修了 dsh-tui 的启动问题，并留下了后续计划。</p>
+<h2 id="一点方法" tabindex="-1">一点方法</h2>
+<p>系统类问题这周基本都按同一个套路处理：先备份、再写一次性脚本、跑完留日志、验证后再落地。麻烦的是每一步都要抵住「直接改一下试试」的冲动——试错的代价往往比多写一个脚本高。</p>
+
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly/weekly-2026-10-30-danimation.html"><span class="dir">← 上一篇</span> danimation：从工作流重构到一条成片</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <a href="/inside/blogs/blog/weekly/weekly-2026-10-30-overview.html"><span class="dir">下一篇 →</span> 2026-10-23 – 10-30 周记：概览</a>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E6%B8%85%E7%9B%98">清盘</a></li><li class="toc-h2"><a href="#%E4%BF%AE%E7%BD%91">修网</a></li><li class="toc-h2"><a href="#%E6%90%AD%E6%A1%A5">搭桥</a></li><li class="toc-h2"><a href="#%E4%B8%80%E7%82%B9%E6%96%B9%E6%B3%95">一点方法</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
+</body>
+</html>

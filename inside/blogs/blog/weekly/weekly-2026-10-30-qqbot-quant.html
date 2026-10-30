@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QQbot 与量化：把自动化做得更可靠 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="机器人这周主要补边界：权限、命令守卫、转发自检；量化平台先把日报跑稳。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="QQbot 与量化：把自动化做得更可靠 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="机器人这周主要补边界：权限、命令守卫、转发自检；量化平台先把日报跑稳。">
+<meta property="og:url" content="https://thefreedoomdoor.github.io/inside/blogs/blog/weekly/weekly-2026-10-30-qqbot-quant.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a><a class="nav-link" href="/inside/login.html">Login</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a><a class="nav-link" href="/inside/login.html">Login</a></div>
+
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>QQbot 与量化：把自动化做得更可靠</h1>
+        <div class="article-meta">
+          <time datetime="2026-10-30">2026-10-30</time>
+          <span class="dot"></span>
+          <span>425 字 · 1 分钟</span>
+          <span class="dot"></span><span>QQbot · 量化 · 自动化</span>
+        </div>
+        <p class="article-summary">机器人这周主要补边界：权限、命令守卫、转发自检；量化平台先把日报跑稳。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="qqbot-把边界守住" tabindex="-1">QQbot：把边界守住</h2>
+<p>这周在机器人上花的时间，大部分不是加功能，而是补边界。</p>
+<p>权限与命令是两条主线：给插件加了 owner 身份校验，确认命令确实来自该来的人；加了命令守卫的检查脚本，把「谁能触发什么」写成可执行的断言；转发自检用来确认消息在被转发时没有丢字段。另有一组端到端脚本，覆盖限流和黑名单两条常见故障路径——与其等线上出事，不如先在测试里把它跑崩。</p>
+<p>功能侧做的是视频分镜插件。它需要把一段文本拆成镜头，再交给下游生成。这类插件的难点不在调用模型，而在状态管理：每一步的产物落在哪、失败了从哪一步重试、配置热加载后旧状态怎么处理。这周把配置和主逻辑重新梳了一遍，运维文档也同步更新了。</p>
+<h2 id="量化-先把日报跑稳" tabindex="-1">量化：先把日报跑稳</h2>
+<p>另一个项目是基于 Jev 与 DeepSeek 搭的量化平台。这周的目标很克制：不追求策略收益，先把运行时跑通。现在它会按计划采集因子、存每日快照、生成当天报告，数据落在本地库里。</p>
+<p>这部分的经验是：先把「每天有没有产出」变成可观察的事实，再谈策略好坏。日报稳定之后，回测和调参才有意义。</p>
+<h2 id="下一步" tabindex="-1">下一步</h2>
+<ul>
+<li>把自检脚本接进发布前流程，而不是散落在测试目录里</li>
+<li>量化平台先观察一周日报的稳定性，再动策略层</li>
+</ul>
+
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly-2026-10-29-accel.html"><span class="dir">← 上一篇</span> 给博客接上 GitHub 加速</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <a href="/inside/blogs/blog/weekly/weekly-2026-10-30-danimation.html"><span class="dir">下一篇 →</span> danimation：从工作流重构到一条成片</a>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#qqbot-%E6%8A%8A%E8%BE%B9%E7%95%8C%E5%AE%88%E4%BD%8F">QQbot：把边界守住</a></li><li class="toc-h2"><a href="#%E9%87%8F%E5%8C%96-%E5%85%88%E6%8A%8A%E6%97%A5%E6%8A%A5%E8%B7%91%E7%A8%B3">量化：先把日报跑稳</a></li><li class="toc-h2"><a href="#%E4%B8%8B%E4%B8%80%E6%AD%A5">下一步</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
+</body>
+</html>

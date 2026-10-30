@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>danimation：从工作流重构到一条成片 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="重构 cinematic 工作流，接通 hyperframes 与 openDAW，并交付一条完整成片；顺手记下四个坑。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="danimation：从工作流重构到一条成片 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="重构 cinematic 工作流，接通 hyperframes 与 openDAW，并交付一条完整成片；顺手记下四个坑。">
+<meta property="og:url" content="https://thefreedoomdoor.github.io/inside/blogs/blog/weekly/weekly-2026-10-30-danimation.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a><a class="nav-link" href="/inside/login.html">Login</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a><a class="nav-link" href="/inside/login.html">Login</a></div>
+
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>danimation：从工作流重构到一条成片</h1>
+        <div class="article-meta">
+          <time datetime="2026-10-30">2026-10-30</time>
+          <span class="dot"></span>
+          <span>454 字 · 1 分钟</span>
+          <span class="dot"></span><span>danimation · 工作流 · 踩坑</span>
+        </div>
+        <p class="article-summary">重构 cinematic 工作流，接通 hyperframes 与 openDAW，并交付一条完整成片；顺手记下四个坑。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="工作流重做" tabindex="-1">工作流重做</h2>
+<p>这周 danimation 的主要工作是重构 cinematic 工作流，把 hyperframes 与 openDAW 接进来：前者负责画面与镜头组织，后者负责音频。重做之后，一条片子的路径大致是「剧本 → 分镜 → 画面 → 配乐 → 终版 QC」，每一步都有独立的产物和报告。</p>
+<p>用新工作流跑了三件事：一条 3D 模拟恐怖短片、一段以钢琴主旋律为基础的轻快纯音乐，以及一条「勾股定理」主题的成片。最后这条是完整交付：web.mp4、海报、contact sheet、<a href="http://DELIVERY.md">DELIVERY.md</a> 都齐了。</p>
+<h2 id="四个坑" tabindex="-1">四个坑</h2>
+<p><strong>画幅不一致。</strong> 传入 4:3，但交付模板默认 2.39:1，终版 QC 直接报 high 级问题：成片可见区两侧出现 pillarbox。4:3 是刻意的，那就得在出片前把 DELIVERY 里的规格同步成实际画幅，否则每次都要人工解释。</p>
+<p><strong>自动模式不等于通过。</strong> <code>intakeMode: auto</code> 加上 <code>reviewMode: off</code>，流程会一路跑完，但剧本、画面、终版三处审稿的结果都是「两轮后仍有意见」，标了 unconfirmed 之后照样交付。想要真实的通过率，必须开 manual 门。</p>
+<p><strong>别急着取消。</strong> 终版最后一步的配乐复核 provider 连续 timeout，退避重试了二十分钟后自己恢复并跑完。中途手动取消重建，反而会把已经完成的部分丢掉。</p>
+<p><strong>零字节的 manifest。</strong> 剧本阶段出现过 <code>manifestBytes: 0</code>，状态是 warning，流程继续往下走，没有影响后续。这类 warning 值得记录，但不必每次都停下来。</p>
+<h2 id="收获" tabindex="-1">收获</h2>
+<p>流水线能把「生成」跑完，但「验收」必须单独设计。下一步想把画幅、时长、码率这些硬性规格前置到开工时校验，而不是留给终版 QC。</p>
+
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly/weekly-2026-10-30-qqbot-quant.html"><span class="dir">← 上一篇</span> QQbot 与量化：把自动化做得更可靠</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <a href="/inside/blogs/blog/weekly/weekly-2026-10-30-tooling.html"><span class="dir">下一篇 →</span> 系统与工具：清盘、修网、搭桥</a>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E9%87%8D%E5%81%9A">工作流重做</a></li><li class="toc-h2"><a href="#%E5%9B%9B%E4%B8%AA%E5%9D%91">四个坑</a></li><li class="toc-h2"><a href="#%E6%94%B6%E8%8E%B7">收获</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
+</body>
+</html>
