@@ -16,12 +16,6 @@
   });
   if (!texts.length) return;
 
-  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduced) {
-    el.textContent = texts[0];
-    return;
-  }
-
   var TYPE_MS = 90;
   var DELETE_MS = 45;
   var HOLD_MS = 1500;
