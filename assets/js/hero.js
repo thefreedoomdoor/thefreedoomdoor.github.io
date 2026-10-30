@@ -24,6 +24,31 @@
   var index = 0;
   var chars = 0;
   var deleting = false;
+  var bag = [];
+
+  // 洗牌袋：每轮把全部句子打乱后依次抽，抽完再重洗。
+  // 比纯随机更均匀，也不会连着两次抽到同一句。
+  function refillBag() {
+    var list = [];
+    for (var i = 0; i < texts.length; i++) list.push(i);
+    for (var j = list.length - 1; j > 0; j--) {
+      var k = Math.floor(Math.random() * (j + 1));
+      var tmp = list[j];
+      list[j] = list[k];
+      list[k] = tmp;
+    }
+    if (list.length > 1 && list[list.length - 1] === index) {
+      var swap = list[list.length - 1];
+      list[list.length - 1] = list[0];
+      list[0] = swap;
+    }
+    bag = list;
+  }
+
+  function nextIndex() {
+    if (!bag.length) refillBag();
+    return bag.pop();
+  }
 
   function fitFont(text) {
     var n = text.length;
@@ -48,8 +73,8 @@
     el.textContent = text.slice(0, --chars);
     if (chars <= 0) {
       deleting = false;
-      index = (index + 1) % texts.length;
-      window.setTimeout(tick, GAP_MS);
+      index = nextIndex();
+      window.setTimeout(tick, GAP_MS + Math.random() * 260);
       return;
     }
     window.setTimeout(tick, DELETE_MS);
