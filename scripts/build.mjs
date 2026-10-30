@@ -227,6 +227,7 @@ ${scripts.map((src) => `<script src="${src}" defer></script>`).join("\n")}
 
 function renderHome(site, posts) {
   const home = site.home;
+  const meta = site.site || {};
   const slogans = home.slogans.length
     ? home.slogans
     : ["Welcome to my blog!"];
@@ -240,7 +241,7 @@ function renderHome(site, posts) {
   <div class="hero-inner">
     <p class="kicker">${escapeHtml(home.kicker || "NOTES / 随笔")}</p>
     <h1 class="hero-title"><span id="typewriter" data-text='${dataText}'>${escapeHtml(slogans[0])}</span><span class="caret" aria-hidden="true"></span></h1>
-    <p class="hero-sub">${escapeHtml(home.subtitle || site.description || "")}</p>
+    <p class="hero-sub">${escapeHtml(home.subtitle || meta.description || "")}</p>
     <div class="hero-actions">
       <a class="btn btn-primary" href="/inside/blog.html">阅读博客</a>
       <a class="btn btn-ghost" href="/inside/about.html">关于我</a>
@@ -248,7 +249,7 @@ function renderHome(site, posts) {
     <div class="hero-meta">
       <span>${posts.length} 篇文章</span>
       ${latest ? `<span>最后更新 ${escapeHtml(latest.date)}</span>` : ""}
-      <span>${escapeHtml(site.author || "")}</span>
+      <span>${escapeHtml(meta.author || "")}</span>
     </div>
     <p class="hero-hint">scroll <span>↓</span></p>
   </div>
