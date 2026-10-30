@@ -6,7 +6,6 @@
  *   index.html                    首页
  *   inside/blog.html              博客全览（目录树 + 搜索 + 排序 + 置顶）
  *   inside/about.html             ContactMe
- *   inside/login.html             管理员入口说明
  *   inside/blogs/blog/**.html     文章详情
  *   404.html / sitemap.xml
  */
@@ -144,7 +143,6 @@ const NAV_ITEMS = [
   { key: "home", label: "Home", href: "/" },
   { key: "blog", label: "Blog", href: "/inside/blog.html" },
   { key: "about", label: "ContactMe", href: "/inside/about.html" },
-  { key: "login", label: "Login", href: "/inside/login.html" },
 ];
 
 function navHtml(active) {
@@ -369,7 +367,6 @@ ${pinnedHtml(posts)}
     <aside class="blog-side">
       <p class="kicker">INDEX / 全部文章</p>
       <h1>Blog</h1>
-      <p>按目录归档，支持搜索与排序。置顶文章排在目录下方，越晚置顶越靠前。</p>
       <p class="blog-count"></p>
     </aside>
     <section class="blog-main">
@@ -546,9 +543,8 @@ ${projects
     <header class="page-head">
       <p class="kicker">ABOUT / 关于</p>
       <h1>ContactMe</h1>
-      <p>这里是我，以及我正在做的事。</p>
     </header>
-    <div class="about-grid">
+    <div class="about-grid${projects.length ? "" : " is-single"}">
       <section class="profile-card">
         <div class="profile-top">
           ${avatar}
@@ -560,15 +556,7 @@ ${projects
         <p class="profile-bio">${escapeHtml(about.bio || "还没有填写自我介绍。")}</p>
         <div class="contact-links">${links.join("")}</div>
       </section>
-      <aside>
-        <section class="side-block">
-          <h2>About this site</h2>
-          <p style="margin:0;color:var(--text-2);font-size:var(--fs-sm);line-height:1.75">
-            静态站点，托管于 GitHub Pages。内容由本机 Electron 管理端编写、构建并推送。
-          </p>
-        </section>
-        ${projectsHtml}
-      </aside>
+      ${projects.length ? `<aside>${projectsHtml}</aside>` : ""}
     </div>
   </div>
 </main>`;
@@ -580,47 +568,6 @@ ${projects
     active: "about",
     body,
     canonical: "/inside/about.html",
-  });
-}
-
-function renderLogin(site) {
-  const body = `
-<main class="page">
-  <div class="page-inner">
-    <div class="login-card">
-      <p class="kicker">ADMIN / 管理</p>
-      <h1>管理员入口</h1>
-      <p>本站托管在 GitHub Pages 上，只有静态文件，没有服务器。因此这里不提供账号密码登录——任何写进网页的凭据都等于公开。</p>
-
-      <div class="notice remote-only" style="margin-bottom:var(--sp-5)">
-        <strong>当前是公开站点。</strong>管理功能不在网页端，请在本机打开 Electron 管理端（<code>_tools/admin</code>）完成写作与发布。
-      </div>
-
-      <div class="local-only" style="flex-direction:column;gap:var(--sp-3);margin-bottom:var(--sp-5)">
-        <div class="notice"><strong>本机预览环境。</strong>管理端已在本机运行，直接回到管理端窗口即可编辑。</div>
-        <a class="btn btn-primary" href="http://127.0.0.1:4173/" target="_blank" rel="noopener">打开管理端预览</a>
-      </div>
-
-      <ol class="steps">
-        <li>打开本机管理端，输入本地管理密码解锁。</li>
-        <li>在「文章」里新建或编辑，编辑器右侧实时预览。</li>
-        <li>在「站点设置」里调整首页标语与 ContactMe 信息。</li>
-        <li>点「发布」，管理端会构建、提交并推送到 GitHub。</li>
-        <li>GitHub Pages 自动更新，通常一到两分钟。</li>
-      </ol>
-
-      <p class="mono" style="margin:0">没有网页端登录，也没有可被窃取的网页凭据。</p>
-    </div>
-  </div>
-</main>`;
-
-  return layout({
-    site,
-    title: "管理员入口",
-    description: "管理员入口说明",
-    active: "login",
-    body,
-    canonical: "/inside/login.html",
   });
 }
 
@@ -727,7 +674,6 @@ async function main() {
   await write("index.html", renderHome(site, posts));
   await write("inside/blog.html", renderBlog(site, posts, root));
   await write("inside/about.html", renderAbout(site));
-  await write("inside/login.html", renderLogin(site));
   await write("404.html", render404(site));
 
   for (const post of posts) {

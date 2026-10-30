@@ -107,6 +107,3 @@ GitHub Pages 会在一到两分钟内更新。站点是用户主页仓库，直�
 
 这些目录已加入 `.git/info/exclude` 与 `.gitignore`，不会出现在线上。**不要手动提交它们**：`_tools/admin/config.json` 里有本机密码哈希，`runtime.yaml` 里有代理凭据。
 
-## 登录说明
-
-GitHub Pages 是纯静态托管，网页端没有、也不应该有账号密码。导航里的 Login 只说明如何在本机管理端操作。

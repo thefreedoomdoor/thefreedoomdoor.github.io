@@ -81,10 +81,5 @@
     );
   });
 
-  var host = window.location.hostname;
-  if (host === "localhost" || host === "127.0.0.1" || host === "::1") {
-    document.body.classList.add("is-local");
-  }
-
   updateProgress();
 })();
