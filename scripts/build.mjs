@@ -247,7 +247,6 @@ function renderHome(site, posts) {
     </div>
     <div class="hero-meta">
       <span>${posts.length} 篇文章</span>
-      <span>${slogans.length} 种语言</span>
       ${latest ? `<span>最后更新 ${escapeHtml(latest.date)}</span>` : ""}
       <span>${escapeHtml(site.author || "")}</span>
     </div>
