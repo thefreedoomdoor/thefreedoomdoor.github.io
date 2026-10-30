@@ -25,10 +25,16 @@
   var chars = 0;
   var deleting = false;
 
+  function fitFont(text) {
+    var n = text.length;
+    el.style.fontSize = n > 34 ? "0.6em" : n > 24 ? "0.76em" : n > 18 ? "0.9em" : "";
+  }
+
   function tick() {
     var text = texts[index];
 
     if (!deleting) {
+      if (chars === 0) fitFont(text);
       el.textContent = text.slice(0, ++chars);
       if (chars >= text.length) {
         deleting = true;

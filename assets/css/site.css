@@ -1223,6 +1223,7 @@ mark.hit {
 
   .hero-title {
     font-size: clamp(38px, 11vw, 56px);
+    min-height: 2.4em;
   }
 
   .hero-hint {
