@@ -1,5 +1,50 @@
 [
   {
+    "title": "经验卡合集：工具与前端",
+    "url": "/inside/blogs/blog/weekly/cards-2026-11-01-tools.html",
+    "date": "2026-11-01",
+    "tags": [
+      "经验卡",
+      "工具",
+      "three.js"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "四张卡：读会话库、无头截图、three.js 色彩空间、看不见图时怎么验收画面。"
+  },
+  {
+    "title": "经验卡合集：danimation 的声音与工作流",
+    "url": "/inside/blogs/blog/weekly/cards-2026-11-01-danimation.html",
+    "date": "2026-11-01",
+    "tags": [
+      "经验卡",
+      "danimation",
+      "工作流"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "danimation 的 11 张卡：工作流缓存、旋律生成、音色与混音。"
+  },
+  {
+    "title": "经验卡合集：QQbot 的 16 个坑",
+    "url": "/inside/blogs/blog/weekly/cards-2026-11-01-qqbot.html",
+    "date": "2026-11-01",
+    "tags": [
+      "经验卡",
+      "QQbot",
+      "排障"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "把 QQbot 这半年踩过的 16 个坑整理成卡：抓取、文件、脚本、远程连接。"
+  },
+  {
     "title": "2026-10-23 – 10-30 周记：概览",
     "url": "/inside/blogs/blog/weekly/weekly-2026-10-30-overview.html",
     "date": "2026-10-30",

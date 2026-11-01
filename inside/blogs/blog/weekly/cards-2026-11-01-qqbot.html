@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>经验卡合集：QQbot 的 16 个坑 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="把 QQbot 这半年踩过的 16 个坑整理成卡：抓取、文件、脚本、远程连接。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="经验卡合集：QQbot 的 16 个坑 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="把 QQbot 这半年踩过的 16 个坑整理成卡：抓取、文件、脚本、远程连接。">
+<meta property="og:url" content="https://thefreedoomdoor.github.io/inside/blogs/blog/weekly/cards-2026-11-01-qqbot.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></div>
+
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>经验卡合集：QQbot 的 16 个坑</h1>
+        <div class="article-meta">
+          <time datetime="2026-11-01">2026-11-01</time>
+          <span class="dot"></span>
+          <span>1322 字 · 4 分钟</span>
+          <span class="dot"></span><span>经验卡 · QQbot · 排障</span>
+        </div>
+        <p class="article-summary">把 QQbot 这半年踩过的 16 个坑整理成卡：抓取、文件、脚本、远程连接。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="抓取" tabindex="-1">抓取</h2>
+<h3 id="b-站视频-先拿-dash-地址" tabindex="-1">B 站视频：先拿 DASH 地址</h3>
+<p><strong>现象</strong>：手上只有音频地址，或者把 BV 页面直接喂给 ffmpeg。</p>
+<p><strong>做法</strong>：先调 playurl 取 <code>dash</code> 里的 video/audio <code>baseUrl</code>，再分别下载。<code>fnval=16</code> 只返回音频，要选能带视频的取值。</p>
+<p><strong>验证</strong>：ffprobe 能同时读出视频和音频流，时长与源一致。</p>
+<h3 id="dash-长视频半途截断" tabindex="-1">DASH 长视频半途截断</h3>
+<p><strong>现象</strong>：<code>ffmpeg -i URL -c copy</code> 下长片，下完 ffprobe 时长只有源的一半。</p>
+<p><strong>做法</strong>：先按 <code>content-range</code> 拿总字节数，分段下载后核对字节数，再用 ffprobe 核时长。老版本 curl 没有 <code>--retry-all-errors</code>，别依赖它。</p>
+<p><strong>验证</strong>：本地字节数等于 content-range 总大小，时长一致。</p>
+<h3 id="图片消息空回复" tabindex="-1">图片消息空回复</h3>
+<p><strong>现象</strong>：HTTP 200 但 content 为空，token 全花在 reasoning 上。</p>
+<p><strong>做法</strong>：请求体里关 thinking；图片用 OpenAI 的 <code>image_url</code> 格式。只加 <code>enable_thinking:false</code> 对部分中转不够，要确认返回结构。</p>
+<p><strong>验证</strong>：<code>finish_reason=stop</code> 且 content 非空，能读出图里的内容。</p>
+<h2 id="文件" tabindex="-1">文件</h2>
+<h3 id="配置带-bom-热加载静默失败" tabindex="-1">配置带 BOM，热加载静默失败</h3>
+<p><strong>现象</strong>：用 <code>encoding=&quot;utf-8-sig&quot;</code> 写 <code>config.json</code>，插件反复报 <code>Unexpected UTF-8 BOM</code>，配置改动不生效。</p>
+<p><strong>做法</strong>：写配置用无 BOM 的 utf-8；读配置用 <code>utf-8-sig</code> 兼容。判断文件头三字节是不是 <code>EF BB BF</code>。</p>
+<p><strong>验证</strong>：文件头无 BOM，日志出现「配置已重新加载」。</p>
+<h3 id="整份上传覆盖运行时状态" tabindex="-1">整份上传覆盖运行时状态</h3>
+<p><strong>现象</strong>：本地改完 config 整份上传，服务器上由命令写入的状态被旧值覆盖，功能「莫名消失」。</p>
+<p><strong>做法</strong>：把运行时写入的状态放独立文件，config 只保留初始值；读取时优先独立文件。</p>
+<p><strong>验证</strong>：命令设置的值在重启和配置同步后仍然存在。</p>
+<h2 id="脚本" tabindex="-1">脚本</h2>
+<h3 id="命令被处理两次" tabindex="-1">命令被处理两次</h3>
+<p><strong>现象</strong>：同一个 <code>/命令</code> 出现两次 ack、两次回复。</p>
+<p><strong>做法</strong>：自动入口开头判断是否已由 command handler 处理，避免同时注册两类入口。注意 wake_prefix 会先剥掉 <code>/</code>。</p>
+<p><strong>验证</strong>：发一次命令只有一次 ack + 一次最终回复。</p>
+<h3 id="git-bash-改写了远端路径" tabindex="-1">Git Bash 改写了远端路径</h3>
+<p><strong>现象</strong>：SFTP 上传报 <code>FileNotFoundError</code> 或 <code>PermissionError</code>，远端收到的是 <code>C:/Program Files/Git/home/...</code>。</p>
+<p><strong>做法</strong>：设 <code>MSYS_NO_PATHCONV=1</code>；单文件失败时用 <code>sftp.open(remote,&quot;wb&quot;)</code> 兜底，并打印 <code>repr(remote)</code>。</p>
+<p><strong>验证</strong>：脚本打印的远端路径仍是 <code>/root/...</code>，服务器上 ls 得到。</p>
+<h3 id="windows-的-nice-吃掉-ffmpeg-参数" tabindex="-1">Windows 的 nice 吃掉 ffmpeg 参数</h3>
+<p><strong>现象</strong>：<code>asyncio.create_subprocess_exec</code> 调 ffmpeg，<code>select='not(between(pts,1,4))'</code> 在 Windows 报 <code>No such filter: '1'</code>。</p>
+<p><strong>做法</strong>：<code>nice</code> 只在 POSIX 加，Windows 直接执行；不要手工加 <code>\,</code> 维护两份表达式。</p>
+<p><strong>验证</strong>：Windows 本机与 Linux 容器跑同一个测试，都输出 5 张拼图。</p>
+<h3 id="中文乱码" tabindex="-1">中文乱码</h3>
+<p><strong>现象</strong>：接口英文正常，中文变成 <code>æ½</code> / <code>锟斤拷</code>。</p>
+<p><strong>做法</strong>：不用 <code>resp.text()</code>（无 charset 时按 latin-1 猜），改读 bytes 自己 <code>decode(&quot;utf-8&quot;)</code>。</p>
+<p><strong>验证</strong>：<code>repr(text[:40])</code> 里有正常汉字，长度量级对得上。</p>
+<h3 id="精确选帧报-cannot-allocate-memory" tabindex="-1">精确选帧报 Cannot allocate memory</h3>
+<p><strong>现象</strong>：<code>select</code> 表达式越写越长，4KB 以上直接报解析错误和内存错误。</p>
+<p><strong>做法</strong>：用定长表达式（Bresenham 生成），或把区间分块、串联多个 <code>select</code>（每块 ≤40 段）。<code>sendcmd</code> 在 7.1 上不生效。</p>
+<p><strong>验证</strong>：输出帧数与目标集合完全一致，对比 <code>showinfo</code> 的 pts 列表。</p>
+<h3 id="关键帧在旧版-ffmpeg-里为空" tabindex="-1">关键帧在旧版 ffmpeg 里为空</h3>
+<p><strong>现象</strong>：<code>-skip_frame nokey -show_frames</code> 在 ffmpeg 4.2 输出全是空行，7.1 正常。</p>
+<p><strong>做法</strong>：改用 <code>show_packets</code>，按行 split，第二列含 <code>K</code> 才取 <code>pts_time</code>。</p>
+<p><strong>验证</strong>：4.2 与 7.1 返回相同的关键帧时间。</p>
+<h3 id="vad-的-pop-返回-none" tabindex="-1">VAD 的 pop 返回 None</h3>
+<p><strong>现象</strong>：<code>vad.pop()</code> 之后 <code>seg.start</code> 报 <code>AttributeError: 'NoneType'</code>。</p>
+<p><strong>做法</strong>：用 <code>vad.front</code> 取段，先复制 samples 再 pop；<code>flush()</code> 之后同样用 front。</p>
+<p><strong>验证</strong>：段数大于 0，start/end 单调递增，与音频时长匹配。</p>
+<h3 id="思考过程混进回复" tabindex="-1">思考过程混进回复</h3>
+<p><strong>现象</strong>：回复开头出现「用户说……要安慰一下」这类元叙述，历史里能看到 <code>&lt;think&gt;</code>。</p>
+<p><strong>做法</strong>：<code>on_llm_request</code> 清历史 think，<code>on_llm_response</code> 清 <code>completion_text</code> 和 <code>reasoning_content</code>，<code>on_decorating_result</code> 删 think 组件；只清 LLM 结果，别碰命令结果。</p>
+<p><strong>验证</strong>：单测全过；真实历史抽检只改泄露样本，正常回复不动。</p>
+<h2 id="工具" tabindex="-1">工具</h2>
+<h3 id="sftp-失败留下-0-字节" tabindex="-1">SFTP 失败留下 0 字节</h3>
+<p><strong>现象</strong>：<code>sftp.get</code> 会先创建本地文件再拉数据，远端不存在时留下 0 字节，把上一轮的好文件覆盖掉。</p>
+<p><strong>做法</strong>：先 <code>stat</code> 再 <code>get</code>，下载到临时文件，校验大小后 <code>os.replace</code>。</p>
+<p><strong>验证</strong>：本地大小等于远端 stat 大小且非 0。</p>
+<h3 id="ssh-连发被限流-后台任务挂住" tabindex="-1">SSH 连发被限流，后台任务挂住</h3>
+<p><strong>现象</strong>：连续连服务器第 2–3 次报 <code>Error reading SSH protocol banner</code> / <code>10054</code>；<code>nohup ... &amp;</code> 之后 ssh 一直不返回。</p>
+<p><strong>做法</strong>：重试退避 8/16/24/32/40 秒；一次连接做完上传、执行、取回；后台任务用 <code>nohup ... &gt;log 2&gt;&amp;1 &lt;/dev/null &amp;</code>，启动命令给 10–20 秒短超时，再另开连接轮询日志。</p>
+<p><strong>验证</strong>：退避后命令返回；<code>pgrep</code> / <code>tail</code> 能看到后台任务在跑。</p>
+<h3 id="virtualbox-限速把-vm-启动卡死" tabindex="-1">VirtualBox 限速把 VM 启动卡死</h3>
+<p><strong>现象</strong>：用 <code>VBoxManage bandwidthctl ... add Limit --type network</code> 后，VM 冷启动卡在网卡重命名，SSH 永不就绪。</p>
+<p><strong>做法</strong>：不在 VM 层面用带宽组，改在 VM 内用 <code>tc</code> + <code>ifb</code> 限下行，<code>tbf</code> 限上行。</p>
+<p><strong>验证</strong>：VM 能正常启动到 SSH，实测下载约 600–650 KB/s。</p>
+
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly/weekly-2026-10-30-overview.html"><span class="dir">← 上一篇</span> 2026-10-23 – 10-30 周记：概览</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <a href="/inside/blogs/blog/weekly/cards-2026-11-01-danimation.html"><span class="dir">下一篇 →</span> 经验卡合集：danimation 的声音与工作流</a>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E6%8A%93%E5%8F%96">抓取</a></li><li class="toc-h3"><a href="#b-%E7%AB%99%E8%A7%86%E9%A2%91-%E5%85%88%E6%8B%BF-dash-%E5%9C%B0%E5%9D%80">B 站视频：先拿 DASH 地址</a></li><li class="toc-h3"><a href="#dash-%E9%95%BF%E8%A7%86%E9%A2%91%E5%8D%8A%E9%80%94%E6%88%AA%E6%96%AD">DASH 长视频半途截断</a></li><li class="toc-h3"><a href="#%E5%9B%BE%E7%89%87%E6%B6%88%E6%81%AF%E7%A9%BA%E5%9B%9E%E5%A4%8D">图片消息空回复</a></li><li class="toc-h2"><a href="#%E6%96%87%E4%BB%B6">文件</a></li><li class="toc-h3"><a href="#%E9%85%8D%E7%BD%AE%E5%B8%A6-bom-%E7%83%AD%E5%8A%A0%E8%BD%BD%E9%9D%99%E9%BB%98%E5%A4%B1%E8%B4%A5">配置带 BOM，热加载静默失败</a></li><li class="toc-h3"><a href="#%E6%95%B4%E4%BB%BD%E4%B8%8A%E4%BC%A0%E8%A6%86%E7%9B%96%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81">整份上传覆盖运行时状态</a></li><li class="toc-h2"><a href="#%E8%84%9A%E6%9C%AC">脚本</a></li><li class="toc-h3"><a href="#%E5%91%BD%E4%BB%A4%E8%A2%AB%E5%A4%84%E7%90%86%E4%B8%A4%E6%AC%A1">命令被处理两次</a></li><li class="toc-h3"><a href="#git-bash-%E6%94%B9%E5%86%99%E4%BA%86%E8%BF%9C%E7%AB%AF%E8%B7%AF%E5%BE%84">Git Bash 改写了远端路径</a></li><li class="toc-h3"><a href="#windows-%E7%9A%84-nice-%E5%90%83%E6%8E%89-ffmpeg-%E5%8F%82%E6%95%B0">Windows 的 nice 吃掉 ffmpeg 参数</a></li><li class="toc-h3"><a href="#%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81">中文乱码</a></li><li class="toc-h3"><a href="#%E7%B2%BE%E7%A1%AE%E9%80%89%E5%B8%A7%E6%8A%A5-cannot-allocate-memory">精确选帧报 Cannot allocate memory</a></li><li class="toc-h3"><a href="#%E5%85%B3%E9%94%AE%E5%B8%A7%E5%9C%A8%E6%97%A7%E7%89%88-ffmpeg-%E9%87%8C%E4%B8%BA%E7%A9%BA">关键帧在旧版 ffmpeg 里为空</a></li><li class="toc-h3"><a href="#vad-%E7%9A%84-pop-%E8%BF%94%E5%9B%9E-none">VAD 的 pop 返回 None</a></li><li class="toc-h3"><a href="#%E6%80%9D%E8%80%83%E8%BF%87%E7%A8%8B%E6%B7%B7%E8%BF%9B%E5%9B%9E%E5%A4%8D">思考过程混进回复</a></li><li class="toc-h2"><a href="#%E5%B7%A5%E5%85%B7">工具</a></li><li class="toc-h3"><a href="#sftp-%E5%A4%B1%E8%B4%A5%E7%95%99%E4%B8%8B-0-%E5%AD%97%E8%8A%82">SFTP 失败留下 0 字节</a></li><li class="toc-h3"><a href="#ssh-%E8%BF%9E%E5%8F%91%E8%A2%AB%E9%99%90%E6%B5%81-%E5%90%8E%E5%8F%B0%E4%BB%BB%E5%8A%A1%E6%8C%82%E4%BD%8F">SSH 连发被限流，后台任务挂住</a></li><li class="toc-h3"><a href="#virtualbox-%E9%99%90%E9%80%9F%E6%8A%8A-vm-%E5%90%AF%E5%8A%A8%E5%8D%A1%E6%AD%BB">VirtualBox 限速把 VM 启动卡死</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>经验卡合集：danimation 的声音与工作流 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="danimation 的 11 张卡：工作流缓存、旋律生成、音色与混音。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="经验卡合集：danimation 的声音与工作流 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="danimation 的 11 张卡：工作流缓存、旋律生成、音色与混音。">
+<meta property="og:url" content="https://thefreedoomdoor.github.io/inside/blogs/blog/weekly/cards-2026-11-01-danimation.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></div>
+
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>经验卡合集：danimation 的声音与工作流</h1>
+        <div class="article-meta">
+          <time datetime="2026-11-01">2026-11-01</time>
+          <span class="dot"></span>
+          <span>954 字 · 3 分钟</span>
+          <span class="dot"></span><span>经验卡 · danimation · 工作流</span>
+        </div>
+        <p class="article-summary">danimation 的 11 张卡：工作流缓存、旋律生成、音色与混音。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="工作流" tabindex="-1">工作流</h2>
+<h3 id="修订运行丢参数" tabindex="-1">修订运行丢参数</h3>
+<p><strong>现象</strong>：用 AmendWorkflow 续跑带 launch 参数的工作流后，运行详情里 Launch arguments 变成空对象，参数代理开始提议一部新片。</p>
+<p><strong>做法</strong>：修订前在脚本里合并默认值。<code>args</code> 是冻结对象，不能 <code>Object.assign</code>，要新建对象展开。</p>
+<p><strong>验证</strong>：新运行的参数提示里能看到原始键值；制片阶段 0 秒结算（命中缓存），片名不变。</p>
+<h3 id="manifest-审计仍报旧失败" tabindex="-1">manifest 审计仍报旧失败</h3>
+<p><strong>现象</strong>：manifest 已经压到上限内，重跑或修订后仍报同一句 audit failed，字节数是修之前的旧值。</p>
+<p><strong>做法</strong>：audit 结果来自 journal，不会重读磁盘文件；给失败的 audit 调用加一个显式参数，改变缓存键后再跑。</p>
+<p><strong>验证</strong>：单独跑 audit 返回 <code>&quot;ok&quot;: true</code>；新运行日志不再出现旧字节数。</p>
+<h3 id="motif-写-rest-报错" tabindex="-1">motif 写 rest 报错</h3>
+<p><strong>现象</strong>：motif 里写 <code>[&quot;rest&quot;,1]</code> 或 <code>[null,1]</code>，展开时报 <code>bad note name: 'rest'</code>。</p>
+<p><strong>做法</strong>：<code>motif_notes</code> 把 rest/None 映射成 None，<code>transform_motif</code> 保留，<code>_melody</code> 遇到 None 只推进 cursor、不发声。</p>
+<p><strong>验证</strong>：<code>motif_notes([[&quot;C5&quot;,1],[&quot;rest&quot;,1],[&quot;E5&quot;,2]])</code> 返回 <code>[(72,1),(None,1),(76,2)]</code>，expand 有 2 个音。</p>
+<h3 id="字幕卡数门禁冲突" tabindex="-1">字幕卡数门禁冲突</h3>
+<p><strong>现象</strong>：2 分钟片、锁定分镜只有 4 张卡，字幕阶段两轮后报 card count 不在 6–10。</p>
+<p><strong>做法</strong>：门禁以锁定分镜为准，只查零卡片；不要在字幕阶段往 timeline 加卡。</p>
+<p><strong>验证</strong>：门禁不再报 card count，SRT 校验通过，卡片数与锁定分镜一致。</p>
+<h3 id="换-family-后空测报错" tabindex="-1">换 family 后空测报错</h3>
+<p><strong>现象</strong>：render 正常，verify 报 family stems sum to mix 7.2 dB；刚把某个 part 的 family 从 melody 改成 harmony。</p>
+<p><strong>做法</strong>：换 family 后先清空 family stem 目录再 render。<code>--keep-stems</code> 只写当前 families，不会删旧 wav。</p>
+<p><strong>验证</strong>：verify 空测 ≤ -60 dB（这次是 -101.5 dB）。</p>
+<h3 id="结尾旋律丢音" tabindex="-1">结尾旋律丢音</h3>
+<p><strong>现象</strong>：最后一小节的最后一个音没响，expand 事件数比谱面少一个。</p>
+<p><strong>做法</strong>：<code>_melody()</code> 用最后一小节的 <code>bar_end</code> 作段落终点，motif 和 generated contour 两个分支都要改。</p>
+<p><strong>验证</strong>：1 小节、1 个 4 拍音的测试谱，expand 后 lead 事件数=1、t=0。</p>
+<h2 id="音色与混音" tabindex="-1">音色与混音</h2>
+<h3 id="主旋律被混响盖住" tabindex="-1">主旋律被混响盖住</h3>
+<p><strong>现象</strong>：加 pad/竖琴后钢琴不突出，分段落算 melody 与 harmony+texture 的 RMS 只差 0–1 dB。</p>
+<p><strong>做法</strong>：pad/竖琴的 send 从 0.6 降到 0.2–0.3，<code>mix.reverb_gain</code> 从 0.34 降到 0.15–0.2；pad 的 family 设成 texture；主旋律 send 0.35–0.45。</p>
+<p><strong>验证</strong>：按段算 RMS，主旋律比伴奏高 3–8 dB；solo 不炸。</p>
+<h3 id="伴奏低八度" tabindex="-1">伴奏低八度</h3>
+<p><strong>现象</strong>：pad/左手比谱面低一个八度，events.json 里的 midi 比预期低 12。</p>
+<p><strong>做法</strong>：<code>voice_lead(None, chord, octave)</code> 的候选从 <code>octave-1</code> 开始，没有 prev 时取中心最接近的候选；或者把 part 的 octave +1 抵消。</p>
+<p><strong>验证</strong>：<code>voice_lead(None,&quot;C&quot;,4)</code> 的中心音落在 C4–B4，而不是 C3。</p>
+<h3 id="单钢琴声音炸" tabindex="-1">单钢琴声音炸</h3>
+<p><strong>现象</strong>：solo 每个音一样响；改 <code>parts[].velocity</code> 后 render_info 完全不变。</p>
+<p><strong>做法</strong>：在 <code>render_event()</code> 出口加力度到电平的映射；<code>VELOCITY_DB</code> 给动态深度（钢琴 24、pad 14、sub 12、打击 16–18），mix 峰值 -6 dBFS。</p>
+<p><strong>验证</strong>：MIDI 60 / vel 0.5 峰值约 -6 dBFS；0.3 与 0.7 的 RMS 差大于 6 dB。</p>
+<h3 id="旋律没有句法" tabindex="-1">旋律没有句法</h3>
+<p><strong>现象</strong>：每个音一样响，没有起句和收句，solo 尤其明显。</p>
+<p><strong>做法</strong>：<code>_melody()</code> 加乐句拱形和长音/反拍重音，humanize 用 ±10%。</p>
+<p><strong>验证</strong>：events.json 的 lead velocity 有 min/mean/max 分布，句中略高于句首句尾。</p>
+<h3 id="母带太响压平动态" tabindex="-1">母带太响压平动态</h3>
+<p><strong>现象</strong>：-16 LUFS 但 true peak 很低，comp/lim GR 很大，听着顶、没有弱起。</p>
+<p><strong>做法</strong>：solo/acoustic 设 -18…-20 LUFS，混音峰值 -6 dBFS；A/B 前先把两版响度对齐。</p>
+<p><strong>验证</strong>：-20 LUFS 版 LRA 比 -16 版大 2–4 dB，comp/lim 接近 0。</p>
+
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly/cards-2026-11-01-qqbot.html"><span class="dir">← 上一篇</span> 经验卡合集：QQbot 的 16 个坑</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <a href="/inside/blogs/blog/weekly/cards-2026-11-01-tools.html"><span class="dir">下一篇 →</span> 经验卡合集：工具与前端</a>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E5%B7%A5%E4%BD%9C%E6%B5%81">工作流</a></li><li class="toc-h3"><a href="#%E4%BF%AE%E8%AE%A2%E8%BF%90%E8%A1%8C%E4%B8%A2%E5%8F%82%E6%95%B0">修订运行丢参数</a></li><li class="toc-h3"><a href="#manifest-%E5%AE%A1%E8%AE%A1%E4%BB%8D%E6%8A%A5%E6%97%A7%E5%A4%B1%E8%B4%A5">manifest 审计仍报旧失败</a></li><li class="toc-h3"><a href="#motif-%E5%86%99-rest-%E6%8A%A5%E9%94%99">motif 写 rest 报错</a></li><li class="toc-h3"><a href="#%E5%AD%97%E5%B9%95%E5%8D%A1%E6%95%B0%E9%97%A8%E7%A6%81%E5%86%B2%E7%AA%81">字幕卡数门禁冲突</a></li><li class="toc-h3"><a href="#%E6%8D%A2-family-%E5%90%8E%E7%A9%BA%E6%B5%8B%E6%8A%A5%E9%94%99">换 family 后空测报错</a></li><li class="toc-h3"><a href="#%E7%BB%93%E5%B0%BE%E6%97%8B%E5%BE%8B%E4%B8%A2%E9%9F%B3">结尾旋律丢音</a></li><li class="toc-h2"><a href="#%E9%9F%B3%E8%89%B2%E4%B8%8E%E6%B7%B7%E9%9F%B3">音色与混音</a></li><li class="toc-h3"><a href="#%E4%B8%BB%E6%97%8B%E5%BE%8B%E8%A2%AB%E6%B7%B7%E5%93%8D%E7%9B%96%E4%BD%8F">主旋律被混响盖住</a></li><li class="toc-h3"><a href="#%E4%BC%B4%E5%A5%8F%E4%BD%8E%E5%85%AB%E5%BA%A6">伴奏低八度</a></li><li class="toc-h3"><a href="#%E5%8D%95%E9%92%A2%E7%90%B4%E5%A3%B0%E9%9F%B3%E7%82%B8">单钢琴声音炸</a></li><li class="toc-h3"><a href="#%E6%97%8B%E5%BE%8B%E6%B2%A1%E6%9C%89%E5%8F%A5%E6%B3%95">旋律没有句法</a></li><li class="toc-h3"><a href="#%E6%AF%8D%E5%B8%A6%E5%A4%AA%E5%93%8D%E5%8E%8B%E5%B9%B3%E5%8A%A8%E6%80%81">母带太响压平动态</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
+</body>
+</html>
