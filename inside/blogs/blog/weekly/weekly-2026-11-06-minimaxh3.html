@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>minimaxh3：从 ComfyUI 工作流到剪映 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="搭起 minimax-h3 的 ComfyUI 流水线，试通剪映自动化，并把显卡环境从 cu128 换到 cu130。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="minimaxh3：从 ComfyUI 工作流到剪映 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="搭起 minimax-h3 的 ComfyUI 流水线，试通剪映自动化，并把显卡环境从 cu128 换到 cu130。">
+<meta property="og:url" content="https://thefreedoomdoor.github.io/inside/blogs/blog/weekly/weekly-2026-11-06-minimaxh3.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></div>
+
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>minimaxh3：从 ComfyUI 工作流到剪映</h1>
+        <div class="article-meta">
+          <time datetime="2026-11-06">2026-11-06</time>
+          <span class="dot"></span>
+          <span>301 字 · 1 分钟</span>
+          <span class="dot"></span><span>minimaxh3 · ComfyUI · 视频</span>
+        </div>
+        <p class="article-summary">搭起 minimax-h3 的 ComfyUI 流水线，试通剪映自动化，并把显卡环境从 cu128 换到 cu130。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="流水线" tabindex="-1">流水线</h2>
+<p>这周把 minimax-h3 的视频流水线搭了起来：ComfyUI 里做关键帧和分段候选，<code>pipeline_run.py</code> 负责跑批，产物按 <code>pipeline/&lt;片名&gt;/{script,keyframe,candidates,manifest}</code> 组织。到周末已经能稳定产出分镜候选段。</p>
+<h2 id="剪映这一段" tabindex="-1">剪映这一段</h2>
+<p>自动化剪辑试了两条路。一条是用 computer-use 直接操作剪映：批量导入要 <code>Ctrl+L</code> 跳目录、文件名框输通配符、点列表下方空白再 <code>Ctrl+A</code>；拖素材进时间线，<code>left_click_drag</code> 必须带 <code>strategy: &quot;event&quot;</code>，默认的 auto 不生效。</p>
+<p>另一条是程序化生成草稿，走不通：剪映 7+ / 草稿 10.8 以上的 <code>draft_content.json</code> 是加密的，pyJianYingDraft 这类工具读到的只是密文。所以改成 ffmpeg 拼接出片，剪映只做手动精修。</p>
+<h2 id="环境" tabindex="-1">环境</h2>
+<p>同一套工作流换机器后从 66 秒变成 562 秒，原因是 cu128 下量化核走了 eager 回退。另建一个 cu130 的隔离环境（共享模型和自定义节点、另起端口），速度回到 66 秒。</p>
+<h2 id="下周" tabindex="-1">下周</h2>
+<p>把关键帧、分段、拼接串成一条命令；剪映留在精修环节，不再尝试全自动工程文件。</p>
+
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-06-qqbot.html"><span class="dir">← 上一篇</span> QQbot：飞书通道与登录态告警</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-06-danimation.html"><span class="dir">下一篇 →</span> danimation 与《李白传》：工作流 v3.1 与 genre 的坑</a>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E6%B5%81%E6%B0%B4%E7%BA%BF">流水线</a></li><li class="toc-h2"><a href="#%E5%89%AA%E6%98%A0%E8%BF%99%E4%B8%80%E6%AE%B5">剪映这一段</a></li><li class="toc-h2"><a href="#%E7%8E%AF%E5%A2%83">环境</a></li><li class="toc-h2"><a href="#%E4%B8%8B%E5%91%A8">下周</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
+</body>
+</html>

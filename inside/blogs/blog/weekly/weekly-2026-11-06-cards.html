@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>本周经验卡：剪映、模型下载与显卡环境 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="本周 14 张卡：展开剪映草稿加密、hf-mirror 大文件、cu128 回退三张，其余按类归纳。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="本周经验卡：剪映、模型下载与显卡环境 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="本周 14 张卡：展开剪映草稿加密、hf-mirror 大文件、cu128 回退三张，其余按类归纳。">
+<meta property="og:url" content="https://thefreedoomdoor.github.io/inside/blogs/blog/weekly/weekly-2026-11-06-cards.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></div>
+
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>本周经验卡：剪映、模型下载与显卡环境</h1>
+        <div class="article-meta">
+          <time datetime="2026-11-06">2026-11-06</time>
+          <span class="dot"></span>
+          <span>517 字 · 1 分钟</span>
+          <span class="dot"></span><span>经验卡 · 剪映 · ComfyUI</span>
+        </div>
+        <p class="article-summary">本周 14 张卡：展开剪映草稿加密、hf-mirror 大文件、cu128 回退三张，其余按类归纳。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="三张展开" tabindex="-1">三张展开</h2>
+<h3 id="剪映草稿已加密" tabindex="-1">剪映草稿已加密</h3>
+<p><strong>现象</strong>：想用 pyJianYingDraft 生成剪映草稿，打开 <code>draft_content.json</code> 发现是 base64 密文而不是明文 JSON。</p>
+<p><strong>做法</strong>：剪映 7+ / 草稿 10.8 以上不支持程序化生成草稿。改用 ffmpeg 拼接出片，剪映只做手动精修。</p>
+<p><strong>验证</strong>：先查版本确认；最终成片能被剪映正常导入并播放。</p>
+<h3 id="hf-mirror-大文件单流卡死" tabindex="-1">hf-mirror 大文件单流卡死</h3>
+<p><strong>现象</strong>：从 hf-mirror 下 10 GB 级 safetensors，<code>curl -C -</code> 续传一直卡在建立连接，速率 0、没有报错。</p>
+<p><strong>做法</strong>：24 并发加 16 MB 分块，每块独立重连，聚合能到 8–10 MB/s；失败只重下该块。</p>
+<p><strong>验证</strong>：单文件字节数与模型卡 size 完全一致；safetensors 能正常加载 header。</p>
+<h3 id="cu128-下量化核走-eager-回退" tabindex="-1">cu128 下量化核走 eager 回退</h3>
+<p><strong>现象</strong>：同一套工作流换机器后从 66 秒变成 562 秒，w4a8/int8 能跑但慢得离谱。</p>
+<p><strong>做法</strong>：另建隔离的 cu130 环境，共享 <code>models/</code> 和 <code>custom_nodes/</code>，另起端口。</p>
+<p><strong>验证</strong>：<code>torch.version.cuda</code> 显示 ≥13；640×368、124 帧、4 步回到约 66 秒。</p>
+<h2 id="其余按类归纳" tabindex="-1">其余按类归纳</h2>
+<ul>
+<li><strong>剪映操作</strong>：批量导入用 <code>Ctrl+L</code> 加通配符再加 <code>Ctrl+A</code>；拖拽必须 <code>strategy: &quot;event&quot;</code>；接触表上目测裁脸会漂移，回原图按分数坐标裁。</li>
+<li><strong>ComfyUI</strong>：两个实例会抢显存（任务变慢但显存被占满）；UI 转 API 后要确认每个节点有 <code>class_type</code>、<code>/prompt</code> 的 <code>node_errors</code> 为空；<code>autogrow</code> 输入要点开节点加点号键才会真正生效；按位置改 <code>widgets_values</code> 容易整体错位，改完在 UI 里核对。</li>
+<li><strong>环境</strong>：<code>python -I</code> 会丢掉脚本目录，<code>import comfy</code> 失败，补 <code>PYTHONPATH</code>；uv 装包时镜像可能缺某些版本，换源前先确认。</li>
+<li><strong>配置</strong>：运行时状态写到独立文件，别让整份上传把命令写入的值覆盖；工作流的状态目录要落到 <code>films/&lt;slug&gt;/state/</code>，别跑到工作区根目录。</li>
+<li><strong>抓取</strong>：raw 域名和 CDN 全失败、curl 报 schannel 证书错误时，改用 git（走 OpenSSL），<code>git clone --depth 1</code> 能拿到内容。</li>
+</ul>
+
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-06-danimation.html"><span class="dir">← 上一篇</span> danimation 与《李白传》：工作流 v3.1 与 genre 的坑</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-06-overview.html"><span class="dir">下一篇 →</span> 2026-10-30 – 11-06 周记：概览</a>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E4%B8%89%E5%BC%A0%E5%B1%95%E5%BC%80">三张展开</a></li><li class="toc-h3"><a href="#%E5%89%AA%E6%98%A0%E8%8D%89%E7%A8%BF%E5%B7%B2%E5%8A%A0%E5%AF%86">剪映草稿已加密</a></li><li class="toc-h3"><a href="#hf-mirror-%E5%A4%A7%E6%96%87%E4%BB%B6%E5%8D%95%E6%B5%81%E5%8D%A1%E6%AD%BB">hf-mirror 大文件单流卡死</a></li><li class="toc-h3"><a href="#cu128-%E4%B8%8B%E9%87%8F%E5%8C%96%E6%A0%B8%E8%B5%B0-eager-%E5%9B%9E%E9%80%80">cu128 下量化核走 eager 回退</a></li><li class="toc-h2"><a href="#%E5%85%B6%E4%BD%99%E6%8C%89%E7%B1%BB%E5%BD%92%E7%BA%B3">其余按类归纳</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
+</body>
+</html>

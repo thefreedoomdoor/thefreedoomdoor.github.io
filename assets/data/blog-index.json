@@ -1,5 +1,79 @@
 [
   {
+    "title": "2026-10-30 – 11-06 周记：概览",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-06-overview.html",
+    "date": "2026-11-06",
+    "tags": [
+      "周记",
+      "项目"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "十四个活跃项目、十九次主会话、十四张新卡：这周重心在视频生产，QQbot 是另一条主线。"
+  },
+  {
+    "title": "本周经验卡：剪映、模型下载与显卡环境",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-06-cards.html",
+    "date": "2026-11-06",
+    "tags": [
+      "经验卡",
+      "剪映",
+      "ComfyUI"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "本周 14 张卡：展开剪映草稿加密、hf-mirror 大文件、cu128 回退三张，其余按类归纳。"
+  },
+  {
+    "title": "danimation 与《李白传》：工作流 v3.1 与 genre 的坑",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-06-danimation.html",
+    "date": "2026-11-06",
+    "tags": [
+      "danimation",
+      "李白传",
+      "工作流"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "cinematic 推到 v3.1，并做完一条《李白传》考据动画；记下 genre 选错导致整轮作废的教训。"
+  },
+  {
+    "title": "minimaxh3：从 ComfyUI 工作流到剪映",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-06-minimaxh3.html",
+    "date": "2026-11-06",
+    "tags": [
+      "minimaxh3",
+      "ComfyUI",
+      "视频"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "搭起 minimax-h3 的 ComfyUI 流水线，试通剪映自动化，并把显卡环境从 cu128 换到 cu130。"
+  },
+  {
+    "title": "QQbot：飞书通道与登录态告警",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-06-qqbot.html",
+    "date": "2026-11-06",
+    "tags": [
+      "QQbot",
+      "飞书",
+      "运维"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "一周 42 个提交：飞书指令通道、登录态告警、astrguard 的复读修复与动态帮助。"
+  },
+  {
     "title": "经验卡合集：工具与前端",
     "url": "/inside/blogs/blog/weekly/cards-2026-11-01-tools.html",
     "date": "2026-11-01",

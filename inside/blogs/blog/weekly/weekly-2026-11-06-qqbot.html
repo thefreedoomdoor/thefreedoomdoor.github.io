@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QQbot：飞书通道与登录态告警 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="一周 42 个提交：飞书指令通道、登录态告警、astrguard 的复读修复与动态帮助。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="QQbot：飞书通道与登录态告警 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="一周 42 个提交：飞书指令通道、登录态告警、astrguard 的复读修复与动态帮助。">
+<meta property="og:url" content="https://thefreedoomdoor.github.io/inside/blogs/blog/weekly/weekly-2026-11-06-qqbot.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></div>
+
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>QQbot：飞书通道与登录态告警</h1>
+        <div class="article-meta">
+          <time datetime="2026-11-06">2026-11-06</time>
+          <span class="dot"></span>
+          <span>256 字 · 1 分钟</span>
+          <span class="dot"></span><span>QQbot · 飞书 · 运维</span>
+        </div>
+        <p class="article-summary">一周 42 个提交：飞书指令通道、登录态告警、astrguard 的复读修复与动态帮助。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="飞书通道" tabindex="-1">飞书通道</h2>
+<p>这周 QQbot 的主线是把指令通道扩到飞书：轮询加白名单运维命令，回复优先走应用机器人，webhook 兜底，另外补了错误码解析。面板改走 SSH 隧道访问，命令都写进了 OPS 文档。</p>
+<h2 id="登录态告警" tabindex="-1">登录态告警</h2>
+<p>机器人掉登录是常见故障，这周把告警补齐：检测 QQ 登录态，需要扫码或登录失败时，把字符二维码转成 PNG 一并发出；告警本身走应用通道，不再依赖某个 webhook。</p>
+<h2 id="astrguard" tabindex="-1">astrguard</h2>
+<p>两个老问题收了尾：<code>/help</code> 改成动态列出全部指令；复读问题从源头清、提示词约束、去重复尾巴三条一起治。版本到 1.3.0。</p>
+<h2 id="运维" tabindex="-1">运维</h2>
+<p>补了服务器磁盘清理记录和 OPS 手册。这周一共 42 个提交，大部分是通道、告警、文档这类活。</p>
+<h2 id="下周" tabindex="-1">下周</h2>
+<p>飞书通道的权限边界要再收紧；告警需要降噪，避免同一故障反复刷屏。</p>
+
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly/cards-2026-11-01-tools.html"><span class="dir">← 上一篇</span> 经验卡合集：工具与前端</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-06-minimaxh3.html"><span class="dir">下一篇 →</span> minimaxh3：从 ComfyUI 工作流到剪映</a>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E9%A3%9E%E4%B9%A6%E9%80%9A%E9%81%93">飞书通道</a></li><li class="toc-h2"><a href="#%E7%99%BB%E5%BD%95%E6%80%81%E5%91%8A%E8%AD%A6">登录态告警</a></li><li class="toc-h2"><a href="#astrguard">astrguard</a></li><li class="toc-h2"><a href="#%E8%BF%90%E7%BB%B4">运维</a></li><li class="toc-h2"><a href="#%E4%B8%8B%E5%91%A8">下周</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
+</body>
+</html>
