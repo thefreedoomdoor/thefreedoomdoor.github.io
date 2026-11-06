@@ -300,7 +300,8 @@ function byDateDesc(a, b) {
   return a.date < b.date ? 1 : -1;
 }
 
-function folderHtml(node, depth) {
+function folderHtml(node, depth, parentPath = "") {
+  const path = parentPath ? `${parentPath}/${node.name}` : node.name;
   const total = countPosts(node);
   const folders = [...node.folders.values()].sort((a, b) =>
     a.name.localeCompare(b.name, "zh-Hans-CN")
@@ -308,14 +309,14 @@ function folderHtml(node, depth) {
   const posts = node.posts.slice().sort(byDateDesc);
 
   const children = [
-    ...folders.map((child) => folderHtml(child, depth + 1)),
+    ...folders.map((child) => folderHtml(child, depth + 1, path)),
     ...posts.map(postItemHtml),
   ].join("");
 
-  // 只有真的还有子目录才需要收起按钮；根目录 documents 永远展开
-  const collapsible = node.folders.size > 0 && depth > 0;
+  // 根目录 documents 永远展开；其余文件夹都可折叠，默认收起
+  const collapsible = depth > 0;
   const head = collapsible
-    ? `<button class="tree-row" type="button" aria-expanded="true">
+    ? `<button class="tree-row" type="button" aria-expanded="false">
     <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
     <span class="file-icon" aria-hidden="true">📂</span>
     <span class="folder-name">${escapeHtml(node.name)}</span>
@@ -328,8 +329,9 @@ function folderHtml(node, depth) {
     <span class="count">${total}</span>
   </div>`;
 
+  const state = collapsible ? " is-collapsed" : "";
   return `
-<li class="tree-folder${depth === 0 ? " tree-root" : ""}" data-folder-name="${escapeAttr(node.name)}">
+<li class="tree-folder${depth === 0 ? " tree-root" : ""}${state}" data-folder-name="${escapeAttr(node.name)}" data-folder-path="${escapeAttr(path)}">
   ${head}
   <ul class="tree-children">${children}</ul>
 </li>`;

@@ -12,14 +12,60 @@
   var posts = Array.prototype.slice.call(tree.querySelectorAll(".tree-post"));
   var folders = Array.prototype.slice.call(tree.querySelectorAll(".tree-folder"));
 
+  var STORE_KEY = "blog.collapsed";
+  var collapsedSet = null;
+  try {
+    var stored = localStorage.getItem(STORE_KEY);
+    if (stored) collapsedSet = new Set(JSON.parse(stored));
+  } catch (error) {
+    collapsedSet = null;
+  }
+
+  function folderPath(folder) {
+    return folder.getAttribute("data-folder-path") || "";
+  }
+
+  function applyCollapsed() {
+    if (!collapsedSet) {
+      collapsedSet = new Set();
+      folders.forEach(function (folder) {
+        if (folder.classList.contains("is-collapsed")) {
+          collapsedSet.add(folderPath(folder));
+        }
+      });
+    }
+    folders.forEach(function (folder) {
+      var btn = folder.querySelector(":scope > button.tree-row");
+      if (!btn) return;
+      var collapsed = collapsedSet.has(folderPath(folder));
+      folder.classList.toggle("is-collapsed", collapsed);
+      btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+    });
+  }
+
+  function remember(folder, collapsed) {
+    if (!collapsedSet) collapsedSet = new Set();
+    var path = folderPath(folder);
+    if (collapsed) collapsedSet.add(path);
+    else collapsedSet.delete(path);
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify(Array.from(collapsedSet)));
+    } catch (error) {
+      /* 隐私模式下写不了，忽略 */
+    }
+  }
+
   folders.forEach(function (folder) {
     var toggle = folder.querySelector(":scope > button.tree-row");
     if (!toggle) return;
     toggle.addEventListener("click", function () {
       var collapsed = folder.classList.toggle("is-collapsed");
       toggle.setAttribute("aria-expanded", collapsed ? "false" : "true");
+      remember(folder, collapsed);
     });
   });
+
+  applyCollapsed();
 
   function visiblePosts() {
     return posts.filter(function (li) {
@@ -76,6 +122,7 @@
       }
     });
 
+    if (!query) applyCollapsed();
     if (empty) empty.classList.toggle("is-visible", visiblePosts() === 0);
     updateCounter();
   }
