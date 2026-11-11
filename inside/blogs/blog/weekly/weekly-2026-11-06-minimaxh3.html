@@ -39,14 +39,14 @@
         <div class="article-meta">
           <time datetime="2026-11-06">2026-11-06</time>
           <span class="dot"></span>
-          <span>301 字 · 1 分钟</span>
+          <span>308 字 · 1 分钟</span>
           <span class="dot"></span><span>minimaxh3 · ComfyUI · 视频</span>
         </div>
         <p class="article-summary">搭起 minimax-h3 的 ComfyUI 流水线，试通剪映自动化，并把显卡环境从 cu128 换到 cu130。</p>
       </header>
       <div class="article-body prose">
 <h2 id="流水线" tabindex="-1">流水线</h2>
-<p>这周把 minimax-h3 的视频流水线搭了起来：ComfyUI 里做关键帧和分段候选，<code>pipeline_run.py</code> 负责跑批，产物按 <code>pipeline/&lt;片名&gt;/{script,keyframe,candidates,manifest}</code> 组织。到周末已经能稳定产出分镜候选段。</p>
+<p>这周把 minimax-h3 的视频流水线搭了起来：ComfyUI 里做关键帧和分段候选，<code>pipeline_run.py</code> 负责跑批，产物按片名分目录，下面分脚本、关键帧、候选和清单。到周末已经能稳定产出分镜候选段。</p>
 <h2 id="剪映这一段" tabindex="-1">剪映这一段</h2>
 <p>自动化剪辑试了两条路。一条是用 computer-use 直接操作剪映：批量导入要 <code>Ctrl+L</code> 跳目录、文件名框输通配符、点列表下方空白再 <code>Ctrl+A</code>；拖素材进时间线，<code>left_click_drag</code> 必须带 <code>strategy: &quot;event&quot;</code>，默认的 auto 不生效。</p>
 <p>另一条是程序化生成草稿，走不通：剪映 7+ / 草稿 10.8 以上的 <code>draft_content.json</code> 是加密的，pyJianYingDraft 这类工具读到的只是密文。所以改成 ffmpeg 拼接出片，剪映只做手动精修。</p>

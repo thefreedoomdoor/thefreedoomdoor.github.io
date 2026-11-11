@@ -36,5 +36,5 @@ summary: "本周 14 张卡：展开剪映草稿加密、hf-mirror 大文件、cu
 - **剪映操作**：批量导入用 `Ctrl+L` 加通配符再加 `Ctrl+A`；拖拽必须 `strategy: "event"`；接触表上目测裁脸会漂移，回原图按分数坐标裁。
 - **ComfyUI**：两个实例会抢显存（任务变慢但显存被占满）；UI 转 API 后要确认每个节点有 `class_type`、`/prompt` 的 `node_errors` 为空；`autogrow` 输入要点开节点加点号键才会真正生效；按位置改 `widgets_values` 容易整体错位，改完在 UI 里核对。
 - **环境**：`python -I` 会丢掉脚本目录，`import comfy` 失败，补 `PYTHONPATH`；uv 装包时镜像可能缺某些版本，换源前先确认。
-- **配置**：运行时状态写到独立文件，别让整份上传把命令写入的值覆盖；工作流的状态目录要落到 `films/<slug>/state/`，别跑到工作区根目录。
+- **配置**：运行时状态写到独立文件，别让整份上传把命令写入的值覆盖；每部片的状态要落到该片的 state 子目录，别跑到工作区根目录。
 - **抓取**：raw 域名和 CDN 全失败、curl 报 schannel 证书错误时，改用 git（走 OpenSSL），`git clone --depth 1` 能拿到内容。

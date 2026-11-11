@@ -39,7 +39,7 @@
         <div class="article-meta">
           <time datetime="2026-11-11">2026-11-11</time>
           <span class="dot"></span>
-          <span>511 字 · 1 分钟</span>
+          <span>518 字 · 1 分钟</span>
           <span class="dot"></span><span>博客 · Cloudflare · 部署</span>
         </div>
         <p class="article-summary">接上 Cloudflare Pages：push 自动部署、两站逐字节一致，顺带解决沙箱写权限与 8000011 授权报错。</p>
@@ -58,7 +58,7 @@
 <div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button type="button" class="code-copy" data-copy>复制</button></div><pre class="shiki"><code>EPERM: operation not permitted, copyfile
   &#39;...\node_modules\katex\dist\katex.min.css&#39; -&gt; &#39;...\assets\vendor\katex\katex.min.css&#39;
 </code></pre></div>
-<p>补法是给这些目录重建继承关系并统一打 <code>Low</code> 完整性标签，之后 <code>node scripts/build.mjs</code> 在正常权限下就能 exit 0，不再需要提权。顺带还确认了本机两个环境事实：<code>curl</code> 走 HTTPS 全失败（一律返回 000），验证网络只能用 Node 内置的 fetch；<code>wrangler</code> 的 npm shim 会 spawn 子进程，在沙箱里报 EPERM，得直接跑 <code>wrangler-dist/cli.js</code>。</p>
+<p>补法是给这些目录重建继承关系并统一打 <code>Low</code> 完整性标签，之后 <code>node scripts/build.mjs</code> 在正常权限下就能 exit 0，不再需要提权。顺带还确认了本机两个环境事实：<code>curl</code> 走 HTTPS 全失败（一律返回 000），验证网络只能用 Node 内置的 fetch；<code>wrangler</code> 的 npm shim 会 spawn 子进程，在沙箱里报 EPERM，得绕开 shim 直接跑它的真实入口脚本。</p>
 <h2 id="验证" tabindex="-1">验证</h2>
 <ul>
 <li><code>/</code>、<code>/sitemap.xml</code>、<code>/inside/blog.html</code>、文章页与静态资源全部 200，且与 GitHub Pages <strong>逐字节一致</strong>；</li>

@@ -13,7 +13,7 @@ AtomicChat 版 GGUF 在仓库里明写「Not run yet in ComfyUI」，实际接�
 2. `loader.py` 的 `gguf_clip_loader` 对纯文本导出的 qwen3vl 注入两个视觉标记键（`deepstack_merger_list.0.norm.weight` 与 `merger.linear_fc2.weight`），让 `detect_te_model` 认成 QWEN3VL_8B；
 3. ComfyUI 的 KSampler 没有 sigmas 输入，自定义调度得走 `KSamplerSelect + ManualSigmas + SamplerCustom`。
 
-补完能跑，工作流落在 `zimg_qwen21_txt.json` / `zimg_qwen21_ref.json`。
+补完能跑，文生图与参考图各存成一份工作流。
 
 ## Q2_K 把文本通路抹平了
 

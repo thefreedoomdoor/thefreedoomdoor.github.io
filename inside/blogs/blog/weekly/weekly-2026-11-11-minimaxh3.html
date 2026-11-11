@@ -39,7 +39,7 @@
         <div class="article-meta">
           <time datetime="2026-11-11">2026-11-11</time>
           <span class="dot"></span>
-          <span>595 字 · 2 分钟</span>
+          <span>597 字 · 2 分钟</span>
           <span class="dot"></span><span>minimaxh3 · ComfyUI · 量化 · 视频</span>
         </div>
         <p class="article-summary">五天内补三处代码把 Qwen-Image-2.1-Turbo 接进 ComfyUI，却证明 Q2_K 量化会摧毁文本条件；顺手修掉 H3 长度硬编码与整轨杂音。</p>
@@ -52,7 +52,7 @@
 <li><code>loader.py</code> 的 <code>gguf_clip_loader</code> 对纯文本导出的 qwen3vl 注入两个视觉标记键（<code>deepstack_merger_list.0.norm.weight</code> 与 <code>merger.linear_fc2.weight</code>），让 <code>detect_te_model</code> 认成 QWEN3VL_8B；</li>
 <li>ComfyUI 的 KSampler 没有 sigmas 输入，自定义调度得走 <code>KSamplerSelect + ManualSigmas + SamplerCustom</code>。</li>
 </ol>
-<p>补完能跑，工作流落在 <code>zimg_qwen21_txt.json</code> / <code>zimg_qwen21_ref.json</code>。</p>
+<p>补完能跑，文生图与参考图各存成一份工作流。</p>
 <h2 id="q2-k-把文本通路抹平了" tabindex="-1">Q2_K 把文本通路抹平了</h2>
 <p>接着是最反直觉的发现：Q2_K 量化版本对所有提示词都产出同一张「卧室男人」，猫、闸门、英文提示全都不跟随。但证据链很干净：</p>
 <ul>

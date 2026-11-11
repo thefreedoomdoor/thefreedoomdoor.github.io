@@ -63,7 +63,7 @@
 <li><strong>剪映操作</strong>：批量导入用 <code>Ctrl+L</code> 加通配符再加 <code>Ctrl+A</code>；拖拽必须 <code>strategy: &quot;event&quot;</code>；接触表上目测裁脸会漂移，回原图按分数坐标裁。</li>
 <li><strong>ComfyUI</strong>：两个实例会抢显存（任务变慢但显存被占满）；UI 转 API 后要确认每个节点有 <code>class_type</code>、<code>/prompt</code> 的 <code>node_errors</code> 为空；<code>autogrow</code> 输入要点开节点加点号键才会真正生效；按位置改 <code>widgets_values</code> 容易整体错位，改完在 UI 里核对。</li>
 <li><strong>环境</strong>：<code>python -I</code> 会丢掉脚本目录，<code>import comfy</code> 失败，补 <code>PYTHONPATH</code>；uv 装包时镜像可能缺某些版本，换源前先确认。</li>
-<li><strong>配置</strong>：运行时状态写到独立文件，别让整份上传把命令写入的值覆盖；工作流的状态目录要落到 <code>films/&lt;slug&gt;/state/</code>，别跑到工作区根目录。</li>
+<li><strong>配置</strong>：运行时状态写到独立文件，别让整份上传把命令写入的值覆盖；每部片的状态要落到该片的 state 子目录，别跑到工作区根目录。</li>
 <li><strong>抓取</strong>：raw 域名和 CDN 全失败、curl 报 schannel 证书错误时，改用 git（走 OpenSSL），<code>git clone --depth 1</code> 能拿到内容。</li>
 </ul>
 

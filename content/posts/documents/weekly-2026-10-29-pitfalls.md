@@ -15,7 +15,7 @@ summary: "配置骨架、NO_PROXY、失效节点——都不是配置写错，�
 
 ## 二、加了代理参数，curl 还是直连
 
-现象很迷惑：`curl -x http://127.0.0.1:7897 https://github.com` 要么 0.25 秒直接返回 000，要么卡到超时。而同一个代理访问 `api.github.com` 却正常。
+现象很迷惑：`curl -x http://<本地代理端口> https://github.com` 要么 0.25 秒直接返回 000，要么卡到超时。而同一个代理访问 `api.github.com` 却正常。
 
 查环境变量才发现，机器上有个 `NO_PROXY`，值里赫然写着 `.github.com,.githubusercontent.com,codeload.github.com`——它让 curl 主动绕过代理，专门去直连被墙的域名。改成只排除 localhost 之后一切正常；临时绕过则加 `--noproxy ""`。
 

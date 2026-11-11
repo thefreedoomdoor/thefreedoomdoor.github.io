@@ -61,11 +61,11 @@ summary: "把 QQbot 这半年踩过的 16 个坑整理成卡：抓取、文件�
 
 ### Git Bash 改写了远端路径
 
-**现象**：SFTP 上传报 `FileNotFoundError` 或 `PermissionError`，远端收到的是 `C:/Program Files/Git/home/...`。
+**现象**：SFTP 上传报 `FileNotFoundError` 或 `PermissionError`，远端收到的是本机 Git 安装目录下的 home 路径。
 
 **做法**：设 `MSYS_NO_PATHCONV=1`；单文件失败时用 `sftp.open(remote,"wb")` 兜底，并打印 `repr(remote)`。
 
-**验证**：脚本打印的远端路径仍是 `/root/...`，服务器上 ls 得到。
+**验证**：脚本打印的远端路径与服务器上 `ls` 看到的家目录一致。
 
 ### Windows 的 nice 吃掉 ffmpeg 参数
 

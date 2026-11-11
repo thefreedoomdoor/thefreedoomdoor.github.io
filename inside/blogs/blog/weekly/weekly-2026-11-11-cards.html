@@ -39,7 +39,7 @@
         <div class="article-meta">
           <time datetime="2026-11-11">2026-11-11</time>
           <span class="dot"></span>
-          <span>583 字 · 2 分钟</span>
+          <span>600 字 · 2 分钟</span>
           <span class="dot"></span><span>经验卡 · ComfyUI · 剪映</span>
         </div>
         <p class="article-summary">本周十七张卡：展开 H3 长度硬编码、剪映批量导入、接触表裁脸三张，其余按类归纳。</p>
@@ -56,11 +56,11 @@
 <p><strong>验证</strong>：时间线片段数等于导入数；素材箱条目数对得上。</p>
 <h3 id="接触表裁脸坐标漂移" tabindex="-1">接触表裁脸坐标漂移</h3>
 <p><strong>现象</strong>：在 cmp 接触表上按整幅比例目测脸框，连续裁歪；放大复核时找不到脸。</p>
-<p><strong>做法</strong>：不从 sheet 目测。直接从原图 <code>candidates/keyframes_r2/*</code> 按分数坐标裁，再放大 2–4 倍看；首裁取大框（整格宽 40% × 高 60%），确认后再收紧。</p>
+<p><strong>做法</strong>：不从 sheet 目测。直接从候选关键帧目录里的原图按分数坐标裁，再放大 2–4 倍看；首裁取大框（整格宽 40% × 高 60%），确认后再收紧。</p>
 <p><strong>验证</strong>：裁出的框在原图居中且含下巴；同一坐标重复裁结果一致。</p>
 <h2 id="其余按类归纳" tabindex="-1">其余按类归纳</h2>
 <ul>
-<li><strong>路径基准</strong>：<code>cmp\...</code>、<code>candidates\keyframes\...</code>、<code>previs</code> 三类产物都以 <code>pipeline\huichao_ch1\</code> 为基准，不是 manifest 所在目录。拼路径前先 <code>ls</code> 确认。</li>
+<li><strong>路径基准</strong>：接触表、候选关键帧、预演图三类产物都以片名工作目录为基准，不是 manifest 所在目录。拼路径前先确认基准。</li>
 <li><strong>盲评质量</strong>：淘汰状态只认 <code>status: &quot;cut&quot;</code>；每个候选必须有 <code>evidence{I,C,L,M,D}</code> 每轴 ≥4 字符的可证伪观察，以及 <code>judge{gut_rank、duel、devil.attacks、confidence}</code>。</li>
 <li><strong>量化</strong>：Q2_K 下图像通路完好、文本通路被抹平，文生图不可用；img2img 不受影响。</li>
 <li><strong>Python</strong>：<code>python -I</code> 会丢工作目录和 PIL，批处理脚本别加；含反引号的 <code>python -c</code> 用双引号包会被 shell 当命令替换，脚本先落盘再跑。</li>

@@ -7,7 +7,7 @@ summary: "从音频增强的注册表权限，到 PDF 关联被劫持、WizTree 
 
 ## 音频与蓝屏
 
-起因是电脑卡顿、声音断续。查下来几条硬边界：`MMDevices\...\Properties` 下的 `Disable_SysFx` 即使 UAC 提权到管理员也写不进去，那个键只有 SYSTEM 有写权限，正路是走「设置 → 声音 → 设备 → 音频增强」；普通权限下 `Win32_Process` 读管理员进程的 `ExecutablePath` 返回空，容易误判成「查不到路径」；用 `Get-ChildItem -Recurse` 扫全盘找 exe 会直接跑到超时，应该先查注册表 Run 项、计划任务和已知安装目录。
+起因是电脑卡顿、声音断续。查下来几条硬边界：音效增强对应的注册表属性 `Disable_SysFx` 即使 UAC 提权到管理员也写不进去，那个键只有 SYSTEM 有写权限，正路是走「设置 → 声音 → 设备 → 音频增强」；普通权限下 `Win32_Process` 读管理员进程的 `ExecutablePath` 返回空，容易误判成「查不到路径」；用 `Get-ChildItem -Recurse` 扫全盘找 exe 会直接跑到超时，应该先查注册表 Run 项、计划任务和已知安装目录。
 
 ## PDF 被劫持与旧档案
 
@@ -15,7 +15,7 @@ summary: "从音频增强的注册表权限，到 PDF 关联被劫持、WizTree 
 
 ## 表情包与 MCP
 
-给 VTuber 用，从 irasutoya 抓了一批日式表情包（开心、生气、尴尬几类），原始图与 `index.json` 一起落盘。另一个会话在装 blender-mcp，结论值得记：给 DeepSeek Harness 加 MCP 连接**别直接改** `storages/mcp_connector.json`，应用运行中会回写覆盖，正确姿势是界面里「添加连接 → 导入 JSON」。
+给 VTuber 用，从 irasutoya 抓了一批日式表情包（开心、生气、尴尬几类），原始图与 `index.json` 一起落盘。另一个会话在装 blender-mcp，结论值得记：给 DeepSeek Harness 加 MCP 连接**别直接改**应用内的连接配置文件，运行中会回写覆盖，正确姿势是界面里「添加连接 → 导入 JSON」。
 
 ## 其余
 

@@ -30,7 +30,7 @@ EPERM: operation not permitted, copyfile
   '...\node_modules\katex\dist\katex.min.css' -> '...\assets\vendor\katex\katex.min.css'
 ```
 
-补法是给这些目录重建继承关系并统一打 `Low` 完整性标签，之后 `node scripts/build.mjs` 在正常权限下就能 exit 0，不再需要提权。顺带还确认了本机两个环境事实：`curl` 走 HTTPS 全失败（一律返回 000），验证网络只能用 Node 内置的 fetch；`wrangler` 的 npm shim 会 spawn 子进程，在沙箱里报 EPERM，得直接跑 `wrangler-dist/cli.js`。
+补法是给这些目录重建继承关系并统一打 `Low` 完整性标签，之后 `node scripts/build.mjs` 在正常权限下就能 exit 0，不再需要提权。顺带还确认了本机两个环境事实：`curl` 走 HTTPS 全失败（一律返回 000），验证网络只能用 Node 内置的 fetch；`wrangler` 的 npm shim 会 spawn 子进程，在沙箱里报 EPERM，得绕开 shim 直接跑它的真实入口脚本。
 
 ## 验证
 

@@ -39,7 +39,7 @@
         <div class="article-meta">
           <time datetime="2026-11-01">2026-11-01</time>
           <span class="dot"></span>
-          <span>1322 字 · 4 分钟</span>
+          <span>1333 字 · 4 分钟</span>
           <span class="dot"></span><span>经验卡 · QQbot · 排障</span>
         </div>
         <p class="article-summary">把 QQbot 这半年踩过的 16 个坑整理成卡：抓取、文件、脚本、远程连接。</p>
@@ -73,9 +73,9 @@
 <p><strong>做法</strong>：自动入口开头判断是否已由 command handler 处理，避免同时注册两类入口。注意 wake_prefix 会先剥掉 <code>/</code>。</p>
 <p><strong>验证</strong>：发一次命令只有一次 ack + 一次最终回复。</p>
 <h3 id="git-bash-改写了远端路径" tabindex="-1">Git Bash 改写了远端路径</h3>
-<p><strong>现象</strong>：SFTP 上传报 <code>FileNotFoundError</code> 或 <code>PermissionError</code>，远端收到的是 <code>C:/Program Files/Git/home/...</code>。</p>
+<p><strong>现象</strong>：SFTP 上传报 <code>FileNotFoundError</code> 或 <code>PermissionError</code>，远端收到的是本机 Git 安装目录下的 home 路径。</p>
 <p><strong>做法</strong>：设 <code>MSYS_NO_PATHCONV=1</code>；单文件失败时用 <code>sftp.open(remote,&quot;wb&quot;)</code> 兜底，并打印 <code>repr(remote)</code>。</p>
-<p><strong>验证</strong>：脚本打印的远端路径仍是 <code>/root/...</code>，服务器上 ls 得到。</p>
+<p><strong>验证</strong>：脚本打印的远端路径与服务器上 <code>ls</code> 看到的家目录一致。</p>
 <h3 id="windows-的-nice-吃掉-ffmpeg-参数" tabindex="-1">Windows 的 nice 吃掉 ffmpeg 参数</h3>
 <p><strong>现象</strong>：<code>asyncio.create_subprocess_exec</code> 调 ffmpeg，<code>select='not(between(pts,1,4))'</code> 在 Windows 报 <code>No such filter: '1'</code>。</p>
 <p><strong>做法</strong>：<code>nice</code> 只在 POSIX 加，Windows 直接执行；不要手工加 <code>\,</code> 维护两份表达式。</p>

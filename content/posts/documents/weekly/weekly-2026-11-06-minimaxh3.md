@@ -7,7 +7,7 @@ summary: "搭起 minimax-h3 的 ComfyUI 流水线，试通剪映自动化，并�
 
 ## 流水线
 
-这周把 minimax-h3 的视频流水线搭了起来：ComfyUI 里做关键帧和分段候选，`pipeline_run.py` 负责跑批，产物按 `pipeline/<片名>/{script,keyframe,candidates,manifest}` 组织。到周末已经能稳定产出分镜候选段。
+这周把 minimax-h3 的视频流水线搭了起来：ComfyUI 里做关键帧和分段候选，`pipeline_run.py` 负责跑批，产物按片名分目录，下面分脚本、关键帧、候选和清单。到周末已经能稳定产出分镜候选段。
 
 ## 剪映这一段
 
