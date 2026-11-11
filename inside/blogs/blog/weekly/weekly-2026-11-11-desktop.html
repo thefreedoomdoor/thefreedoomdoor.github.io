@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>桌面这一周：PDF 打开方式被劫持、C 盘扫描与表情包 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="从音频增强的注册表权限，到 PDF 关联被劫持、WizTree 扫盘超时，再到给 VTuber 抓表情包——一周的桌面杂事。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="桌面这一周：PDF 打开方式被劫持、C 盘扫描与表情包 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="从音频增强的注册表权限，到 PDF 关联被劫持、WizTree 扫盘超时，再到给 VTuber 抓表情包——一周的桌面杂事。">
+<meta property="og:url" content="https://thefreedoomdoor.github.io/inside/blogs/blog/weekly/weekly-2026-11-11-desktop.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></div>
+
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>桌面这一周：PDF 打开方式被劫持、C 盘扫描与表情包</h1>
+        <div class="article-meta">
+          <time datetime="2026-11-11">2026-11-11</time>
+          <span class="dot"></span>
+          <span>395 字 · 1 分钟</span>
+          <span class="dot"></span><span>Windows · 运维 · 杂记</span>
+        </div>
+        <p class="article-summary">从音频增强的注册表权限，到 PDF 关联被劫持、WizTree 扫盘超时，再到给 VTuber 抓表情包——一周的桌面杂事。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="音频与蓝屏" tabindex="-1">音频与蓝屏</h2>
+<p>起因是电脑卡顿、声音断续。查下来几条硬边界：<code>MMDevices\...\Properties</code> 下的 <code>Disable_SysFx</code> 即使 UAC 提权到管理员也写不进去，那个键只有 SYSTEM 有写权限，正路是走「设置 → 声音 → 设备 → 音频增强」；普通权限下 <code>Win32_Process</code> 读管理员进程的 <code>ExecutablePath</code> 返回空，容易误判成「查不到路径」；用 <code>Get-ChildItem -Recurse</code> 扫全盘找 exe 会直接跑到超时，应该先查注册表 Run 项、计划任务和已知安装目录。</p>
+<h2 id="pdf-被劫持与旧档案" tabindex="-1">PDF 被劫持与旧档案</h2>
+<p><code>11-08</code> 的会话是「文件打开关联被劫持，每次都问打开方式」：清理掉指向不存在程序的关联项，再删残留的旧用户档案，最后顺手做了个垃圾文件扫描。这类问题的坑在于 <code>reg query</code> 在 Git Bash 里的转义——引号层级不对，命令会被拆成两半，得先落成脚本再执行。</p>
+<h2 id="表情包与-mcp" tabindex="-1">表情包与 MCP</h2>
+<p>给 VTuber 用，从 irasutoya 抓了一批日式表情包（开心、生气、尴尬几类），原始图与 <code>index.json</code> 一起落盘。另一个会话在装 blender-mcp，结论值得记：给 DeepSeek Harness 加 MCP 连接<strong>别直接改</strong> <code>storages/mcp_connector.json</code>，应用运行中会回写覆盖，正确姿势是界面里「添加连接 → 导入 JSON」。</p>
+<h2 id="其余" tabindex="-1">其余</h2>
+<p>Cloudflare Worker 版的 GitPort 加速代理完成部署；VirtualBox 里把课程 PPT 的 1–6 页操作做完。都是小活，但每件都卡过一两次。</p>
+<h2 id="下周" tabindex="-1">下周</h2>
+<p>别再全盘递归搜索；清理脚本一律先备份再动手。</p>
+
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-11-minimaxh3.html"><span class="dir">← 上一篇</span> minimaxh3：接进 Qwen-Image，以及一次 2bit 量化的失败</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-11-blog-cloudflare.html"><span class="dir">下一篇 →</span> 博客：从 GitHub Pages 搬到 Cloudflare Pages</a>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E9%9F%B3%E9%A2%91%E4%B8%8E%E8%93%9D%E5%B1%8F">音频与蓝屏</a></li><li class="toc-h2"><a href="#pdf-%E8%A2%AB%E5%8A%AB%E6%8C%81%E4%B8%8E%E6%97%A7%E6%A1%A3%E6%A1%88">PDF 被劫持与旧档案</a></li><li class="toc-h2"><a href="#%E8%A1%A8%E6%83%85%E5%8C%85%E4%B8%8E-mcp">表情包与 MCP</a></li><li class="toc-h2"><a href="#%E5%85%B6%E4%BD%99">其余</a></li><li class="toc-h2"><a href="#%E4%B8%8B%E5%91%A8">下周</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
+</body>
+</html>

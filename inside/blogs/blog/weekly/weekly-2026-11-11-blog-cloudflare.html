@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>博客：从 GitHub Pages 搬到 Cloudflare Pages · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="接上 Cloudflare Pages：push 自动部署、两站逐字节一致，顺带解决沙箱写权限与 8000011 授权报错。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="博客：从 GitHub Pages 搬到 Cloudflare Pages · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="接上 Cloudflare Pages：push 自动部署、两站逐字节一致，顺带解决沙箱写权限与 8000011 授权报错。">
+<meta property="og:url" content="https://thefreedoomdoor.github.io/inside/blogs/blog/weekly/weekly-2026-11-11-blog-cloudflare.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></div>
+
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>博客：从 GitHub Pages 搬到 Cloudflare Pages</h1>
+        <div class="article-meta">
+          <time datetime="2026-11-11">2026-11-11</time>
+          <span class="dot"></span>
+          <span>511 字 · 1 分钟</span>
+          <span class="dot"></span><span>博客 · Cloudflare · 部署</span>
+        </div>
+        <p class="article-summary">接上 Cloudflare Pages：push 自动部署、两站逐字节一致，顺带解决沙箱写权限与 8000011 授权报错。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="为什么搬" tabindex="-1">为什么搬</h2>
+<p>站点一直是「本地构建 → 产物直接提交 → GitHub Pages 托管仓库根目录」。这套流程没有 CI、没有缓存层，想加自定义域名也只能靠 Cloudflare 反代。所以这次直接接到 Cloudflare Pages：仓库不变，push 之后自动构建部署。</p>
+<h2 id="怎么接的" tabindex="-1">怎么接的</h2>
+<p>新建项目 <code>thefreedoomdoor</code>，来源选 GitHub 仓库，生产分支 <code>main</code>，<strong>构建命令留空、输出目录填 <code>/</code></strong>——因为 HTML 是本地构建好后提交的，Cloudflare 不需要再跑一遍构建。</p>
+<p>第一次用 API 建项直接吃了 401：</p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button type="button" class="code-copy" data-copy>复制</button></div><pre class="shiki"><code>error code 8000011: There is an internal issue with your Cloudflare Pages Git installation.
+</code></pre></div>
+<p>这不是代码问题，是 GitHub App 没装。去 dashboard 走一遍 Connect to Git 的授权，回来再建就成功了。</p>
+<h2 id="卡住的不是-cloudflare-是本机沙箱" tabindex="-1">卡住的不是 Cloudflare，是本机沙箱</h2>
+<p>真正耗时间的是 Windows 侧的写权限：根目录有沙箱授权 ACE，但 <code>content/</code>、<code>assets/</code> 这些<strong>早于授权就存在的子目录</strong>既没有继承 ACE，也没打低完整性标签，于是构建在拷贝 KaTeX 时挂掉：</p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button type="button" class="code-copy" data-copy>复制</button></div><pre class="shiki"><code>EPERM: operation not permitted, copyfile
+  &#39;...\node_modules\katex\dist\katex.min.css&#39; -&gt; &#39;...\assets\vendor\katex\katex.min.css&#39;
+</code></pre></div>
+<p>补法是给这些目录重建继承关系并统一打 <code>Low</code> 完整性标签，之后 <code>node scripts/build.mjs</code> 在正常权限下就能 exit 0，不再需要提权。顺带还确认了本机两个环境事实：<code>curl</code> 走 HTTPS 全失败（一律返回 000），验证网络只能用 Node 内置的 fetch；<code>wrangler</code> 的 npm shim 会 spawn 子进程，在沙箱里报 EPERM，得直接跑 <code>wrangler-dist/cli.js</code>。</p>
+<h2 id="验证" tabindex="-1">验证</h2>
+<ul>
+<li><code>/</code>、<code>/sitemap.xml</code>、<code>/inside/blog.html</code>、文章页与静态资源全部 200，且与 GitHub Pages <strong>逐字节一致</strong>；</li>
+<li>不存在的路径返回 404 + 自定义错误页；</li>
+<li>推一个空提交，Cloudflare 15 秒内生成部署并上线，<code>deployment_trigger.type</code> 是 <code>github:push</code>。</li>
+</ul>
+<p>现在两个地址同时可用。自定义域名暂时搁置——账户里还没有域名，而免费的 <code>.us.kg</code> / <code>.eu.org</code> 都要走 NS 委托，等真的需要再说。</p>
+
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-11-desktop.html"><span class="dir">← 上一篇</span> 桌面这一周：PDF 打开方式被劫持、C 盘扫描与表情包</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-11-cards.html"><span class="dir">下一篇 →</span> 本周经验卡：量化、剪映与裁脸坐标</a>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%90%AC">为什么搬</a></li><li class="toc-h2"><a href="#%E6%80%8E%E4%B9%88%E6%8E%A5%E7%9A%84">怎么接的</a></li><li class="toc-h2"><a href="#%E5%8D%A1%E4%BD%8F%E7%9A%84%E4%B8%8D%E6%98%AF-cloudflare-%E6%98%AF%E6%9C%AC%E6%9C%BA%E6%B2%99%E7%AE%B1">卡住的不是 Cloudflare，是本机沙箱</a></li><li class="toc-h2"><a href="#%E9%AA%8C%E8%AF%81">验证</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
+</body>
+</html>

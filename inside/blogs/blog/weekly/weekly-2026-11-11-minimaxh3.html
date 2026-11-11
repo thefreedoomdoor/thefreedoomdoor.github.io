@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>minimaxh3：接进 Qwen-Image，以及一次 2bit 量化的失败 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="五天内补三处代码把 Qwen-Image-2.1-Turbo 接进 ComfyUI，却证明 Q2_K 量化会摧毁文本条件；顺手修掉 H3 长度硬编码与整轨杂音。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="minimaxh3：接进 Qwen-Image，以及一次 2bit 量化的失败 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="五天内补三处代码把 Qwen-Image-2.1-Turbo 接进 ComfyUI，却证明 Q2_K 量化会摧毁文本条件；顺手修掉 H3 长度硬编码与整轨杂音。">
+<meta property="og:url" content="https://thefreedoomdoor.github.io/inside/blogs/blog/weekly/weekly-2026-11-11-minimaxh3.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></div>
+
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>minimaxh3：接进 Qwen-Image，以及一次 2bit 量化的失败</h1>
+        <div class="article-meta">
+          <time datetime="2026-11-11">2026-11-11</time>
+          <span class="dot"></span>
+          <span>595 字 · 2 分钟</span>
+          <span class="dot"></span><span>minimaxh3 · ComfyUI · 量化 · 视频</span>
+        </div>
+        <p class="article-summary">五天内补三处代码把 Qwen-Image-2.1-Turbo 接进 ComfyUI，却证明 Q2_K 量化会摧毁文本条件；顺手修掉 H3 长度硬编码与整轨杂音。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="接入-qwen-image-2-1-turbo" tabindex="-1">接入 Qwen-Image-2.1-Turbo</h2>
+<p>AtomicChat 版 GGUF 在仓库里明写「Not run yet in ComfyUI」，实际接进去要补三处：</p>
+<ol>
+<li><code>ComfyUI-GGUF/tools/convert.py</code> 的 <code>arch_list</code> 加上 <code>ModelQwenImage</code>，key 分别是 <code>img_in.weight</code>、<code>txt_in.text_norm.weight</code>、<code>transformer_blocks.0.attn.norm_q.weight</code>，否则 denoiser 直接报 Unknown model architecture；</li>
+<li><code>loader.py</code> 的 <code>gguf_clip_loader</code> 对纯文本导出的 qwen3vl 注入两个视觉标记键（<code>deepstack_merger_list.0.norm.weight</code> 与 <code>merger.linear_fc2.weight</code>），让 <code>detect_te_model</code> 认成 QWEN3VL_8B；</li>
+<li>ComfyUI 的 KSampler 没有 sigmas 输入，自定义调度得走 <code>KSamplerSelect + ManualSigmas + SamplerCustom</code>。</li>
+</ol>
+<p>补完能跑，工作流落在 <code>zimg_qwen21_txt.json</code> / <code>zimg_qwen21_ref.json</code>。</p>
+<h2 id="q2-k-把文本通路抹平了" tabindex="-1">Q2_K 把文本通路抹平了</h2>
+<p>接着是最反直觉的发现：Q2_K 量化版本对所有提示词都产出同一张「卧室男人」，猫、闸门、英文提示全都不跟随。但证据链很干净：</p>
+<ul>
+<li>conditioning 确实进到了模型（猫 vs 空白的平均差 48）；</li>
+<li>文本编码器语义正常（猫-狗相似度 0.988，高于猫-男人 0.944）；</li>
+<li>DiT 的 <code>txt_in</code> / <code>img_in</code> 是 BF16，没被量化。</li>
+</ul>
+<p>问题只可能出在 transformer blocks 的 Q2_K：图像通路（噪声 + 参考图）完好，文本通路被量化抹平。这也解释了为什么 img2img 还能用。结论写进了卡：<strong>2bit 量化对需要文本条件的文生图不可用</strong>。</p>
+<h2 id="h3-的长度硬编码与整轨锁死" tabindex="-1">H3 的长度硬编码与整轨锁死</h2>
+<p>两个隐蔽 bug。一是工作流 <code>length</code> 字段硬编码 124，改参数不生效；批量修了 6 个工作流，当前在用的 4 个已确认。二是「人声前杂音」：<code>AddGuide</code> 只钉住台词几帧，锁定点之前那段未锁区域会朝目标音频「预热」出渐强杂音。解法是整轨锁死——静音 + 台词 + 静音合成一条 48k 立体声轨，句首尾 30ms/20ms 淡入淡出，只放一个 <code>AddGuide frame_idx=0</code>。</p>
+<h2 id="剪映只做精修" tabindex="-1">剪映只做精修</h2>
+<p>自动剪辑的结论没变：<code>draft_content.json</code> 在剪映 7+ / 草稿 10.8 以上是密文，程序化生成工程文件这条路封死。computer-use 操作剪映可行但娇气（拖拽必须 <code>strategy: &quot;event&quot;</code>，批量导入要 <code>Ctrl+L</code> + 通配符 + <code>Ctrl+A</code>）。所以最终形态是 ffmpeg 拼接出片，剪映退到精修位。</p>
+<h2 id="下周" tabindex="-1">下周</h2>
+<p>换 Q4_K 以上精度复测同一组提示词，把「2bit 不可用」的边界钉准；再把关键帧、分段、拼接串成一条命令。</p>
+
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-11-qqbot.html"><span class="dir">← 上一篇</span> QQbot：三十个提交，从复读治理到登录态告警</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-11-desktop.html"><span class="dir">下一篇 →</span> 桌面这一周：PDF 打开方式被劫持、C 盘扫描与表情包</a>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E6%8E%A5%E5%85%A5-qwen-image-2-1-turbo">接入 Qwen-Image-2.1-Turbo</a></li><li class="toc-h2"><a href="#q2-k-%E6%8A%8A%E6%96%87%E6%9C%AC%E9%80%9A%E8%B7%AF%E6%8A%B9%E5%B9%B3%E4%BA%86">Q2_K 把文本通路抹平了</a></li><li class="toc-h2"><a href="#h3-%E7%9A%84%E9%95%BF%E5%BA%A6%E7%A1%AC%E7%BC%96%E7%A0%81%E4%B8%8E%E6%95%B4%E8%BD%A8%E9%94%81%E6%AD%BB">H3 的长度硬编码与整轨锁死</a></li><li class="toc-h2"><a href="#%E5%89%AA%E6%98%A0%E5%8F%AA%E5%81%9A%E7%B2%BE%E4%BF%AE">剪映只做精修</a></li><li class="toc-h2"><a href="#%E4%B8%8B%E5%91%A8">下周</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
+</body>
+</html>

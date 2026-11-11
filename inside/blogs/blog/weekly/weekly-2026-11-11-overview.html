@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026-11-04 – 11-11 周记：概览 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="十五个活跃项目、十六次主会话、十七张新卡：模型接入与量化调试吃掉了大半周，博客顺手搬上了 Cloudflare。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="2026-11-04 – 11-11 周记：概览 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="十五个活跃项目、十六次主会话、十七张新卡：模型接入与量化调试吃掉了大半周，博客顺手搬上了 Cloudflare。">
+<meta property="og:url" content="https://thefreedoomdoor.github.io/inside/blogs/blog/weekly/weekly-2026-11-11-overview.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></div>
+
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>2026-11-04 – 11-11 周记：概览</h1>
+        <div class="article-meta">
+          <time datetime="2026-11-11">2026-11-11</time>
+          <span class="dot"></span>
+          <span>476 字 · 1 分钟</span>
+          <span class="dot"></span><span>周记 · 项目</span>
+        </div>
+        <p class="article-summary">十五个活跃项目、十六次主会话、十七张新卡：模型接入与量化调试吃掉了大半周，博客顺手搬上了 Cloudflare。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="这一周" tabindex="-1">这一周</h2>
+<p>十五个活跃项目、十六次主会话、十七张新经验卡。和上周「视频生产」的主旋律不同，这周更像一次<strong>把工具链接通</strong>的工程周：minimaxh3 花了五天把 Qwen-Image-2.1-Turbo 塞进 ComfyUI，QQbot 交了三十个提交，博客则从 GitHub Pages 搬到了 Cloudflare Pages。</p>
+<p>minimaxh3 是绝对大头，十四张卡全在它身上。接入 Qwen-Image 补了三处代码，紧接着发现 2bit 量化（Q2_K）把文本条件通路整个抹平——所有提示词生成同一张图；另外 H3 工作流的 <code>length</code> 字段硬编码 124，属于「不看就永远查不到」的隐蔽 bug。盲评体系这周也收紧成固定三件套：证据轴、淘汰状态、评委结论。</p>
+<p>QQbot 一周三十个提交，集中在三处：飞书指令的能力与降噪、astrguard 复读治理、登录态告警（附二维码 PNG）。后台的音频卡顿、PDF 打开方式劫持、C 盘扫描这类桌面杂事，各占了一个会话。</p>
+<p>博客这周办了两件事：子目录可折叠并记忆展开状态；11-11 接上 Cloudflare Pages，push 之后十几秒自动上线，两个域名逐字节一致。</p>
+<h2 id="节奏" tabindex="-1">节奏</h2>
+<p>周一在排查音频与蓝屏，周二起转入 minimaxh3 的模型接入和盲评，周四集中收 QQbot，周五出周记并做博客折叠，周末两天是桌面清理与零散实验，周二、周三回到 Qwen-Image 的量化验证和博客搬家。</p>
+<h2 id="下周" tabindex="-1">下周</h2>
+<ul>
+<li>minimaxh3 换 Q4_K 以上精度复测文本条件，确认 2bit 结论边界</li>
+<li>把关键帧、分段、拼接串成一条命令，剪映只留精修</li>
+<li>QQbot 告警降噪与飞书通道的权限边界（上周欠的，这周仍欠）</li>
+<li>博客：定时周记正式上线，决定是否把 <code>pages.dev</code> 设为唯一主站</li>
+</ul>
+
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-11-cards.html"><span class="dir">← 上一篇</span> 本周经验卡：量化、剪映与裁脸坐标</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <span></span>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E8%BF%99%E4%B8%80%E5%91%A8">这一周</a></li><li class="toc-h2"><a href="#%E8%8A%82%E5%A5%8F">节奏</a></li><li class="toc-h2"><a href="#%E4%B8%8B%E5%91%A8">下周</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
+</body>
+</html>

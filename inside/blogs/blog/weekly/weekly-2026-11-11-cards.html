@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>本周经验卡：量化、剪映与裁脸坐标 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="本周十七张卡：展开 H3 长度硬编码、剪映批量导入、接触表裁脸三张，其余按类归纳。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="本周经验卡：量化、剪映与裁脸坐标 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="本周十七张卡：展开 H3 长度硬编码、剪映批量导入、接触表裁脸三张，其余按类归纳。">
+<meta property="og:url" content="https://thefreedoomdoor.github.io/inside/blogs/blog/weekly/weekly-2026-11-11-cards.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></div>
+
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>本周经验卡：量化、剪映与裁脸坐标</h1>
+        <div class="article-meta">
+          <time datetime="2026-11-11">2026-11-11</time>
+          <span class="dot"></span>
+          <span>583 字 · 2 分钟</span>
+          <span class="dot"></span><span>经验卡 · ComfyUI · 剪映</span>
+        </div>
+        <p class="article-summary">本周十七张卡：展开 H3 长度硬编码、剪映批量导入、接触表裁脸三张，其余按类归纳。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="三张展开" tabindex="-1">三张展开</h2>
+<h3 id="h3-工作流-length-硬编码-124" tabindex="-1">H3 工作流 length 硬编码 124</h3>
+<p><strong>现象</strong>：改参数想生成别的帧数，输出永远是 124 帧，参数像被忽略。</p>
+<p><strong>做法</strong>：检查工作流 JSON 里的 <code>length</code> 字段——它被写死成 124，不跟随界面参数。批量修了 6 个工作流，当前在用的 4 个已确认正常。</p>
+<p><strong>验证</strong>：改请求的帧数后，输出帧数与之一致；批量修复记录写进正式卡，避免下次重查。</p>
+<h3 id="剪映批量导入与拖拽" tabindex="-1">剪映批量导入与拖拽</h3>
+<p><strong>现象</strong>：用 computer-use 操作剪映时，导入框选不中多个文件；素材拖不进时间线。</p>
+<p><strong>做法</strong>：批量导入走「导入 → <code>Ctrl+L</code> 跳目录 → 文件名框输通配符 <code>seg_*.mp4</code> → 点列表下方空白 → <code>Ctrl+A</code> → 回车」；拖素材必须给 <code>left_click_drag</code> 带 <code>strategy: &quot;event&quot;</code>，默认的 auto 不生效。</p>
+<p><strong>验证</strong>：时间线片段数等于导入数；素材箱条目数对得上。</p>
+<h3 id="接触表裁脸坐标漂移" tabindex="-1">接触表裁脸坐标漂移</h3>
+<p><strong>现象</strong>：在 cmp 接触表上按整幅比例目测脸框，连续裁歪；放大复核时找不到脸。</p>
+<p><strong>做法</strong>：不从 sheet 目测。直接从原图 <code>candidates/keyframes_r2/*</code> 按分数坐标裁，再放大 2–4 倍看；首裁取大框（整格宽 40% × 高 60%），确认后再收紧。</p>
+<p><strong>验证</strong>：裁出的框在原图居中且含下巴；同一坐标重复裁结果一致。</p>
+<h2 id="其余按类归纳" tabindex="-1">其余按类归纳</h2>
+<ul>
+<li><strong>路径基准</strong>：<code>cmp\...</code>、<code>candidates\keyframes\...</code>、<code>previs</code> 三类产物都以 <code>pipeline\huichao_ch1\</code> 为基准，不是 manifest 所在目录。拼路径前先 <code>ls</code> 确认。</li>
+<li><strong>盲评质量</strong>：淘汰状态只认 <code>status: &quot;cut&quot;</code>；每个候选必须有 <code>evidence{I,C,L,M,D}</code> 每轴 ≥4 字符的可证伪观察，以及 <code>judge{gut_rank、duel、devil.attacks、confidence}</code>。</li>
+<li><strong>量化</strong>：Q2_K 下图像通路完好、文本通路被抹平，文生图不可用；img2img 不受影响。</li>
+<li><strong>Python</strong>：<code>python -I</code> 会丢工作目录和 PIL，批处理脚本别加；含反引号的 <code>python -c</code> 用双引号包会被 shell 当命令替换，脚本先落盘再跑。</li>
+<li><strong>重写数据</strong>：<code>json.dump</code> 写回会补一个行尾换行，改字段前先备份并按行 diff；按新剧本重置 manifest 要显式删旧剧本独有的条目，<code>ensure_entries</code> 只增不删。</li>
+<li><strong>长文本生成物</strong>：45KB 的分镜 JSON 别用 heredoc 传，会 spawn ENAMETOOLONG，直接落盘再自检。</li>
+</ul>
+
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-11-blog-cloudflare.html"><span class="dir">← 上一篇</span> 博客：从 GitHub Pages 搬到 Cloudflare Pages</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-11-overview.html"><span class="dir">下一篇 →</span> 2026-11-04 – 11-11 周记：概览</a>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E4%B8%89%E5%BC%A0%E5%B1%95%E5%BC%80">三张展开</a></li><li class="toc-h3"><a href="#h3-%E5%B7%A5%E4%BD%9C%E6%B5%81-length-%E7%A1%AC%E7%BC%96%E7%A0%81-124">H3 工作流 length 硬编码 124</a></li><li class="toc-h3"><a href="#%E5%89%AA%E6%98%A0%E6%89%B9%E9%87%8F%E5%AF%BC%E5%85%A5%E4%B8%8E%E6%8B%96%E6%8B%BD">剪映批量导入与拖拽</a></li><li class="toc-h3"><a href="#%E6%8E%A5%E8%A7%A6%E8%A1%A8%E8%A3%81%E8%84%B8%E5%9D%90%E6%A0%87%E6%BC%82%E7%A7%BB">接触表裁脸坐标漂移</a></li><li class="toc-h2"><a href="#%E5%85%B6%E4%BD%99%E6%8C%89%E7%B1%BB%E5%BD%92%E7%BA%B3">其余按类归纳</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
+</body>
+</html>

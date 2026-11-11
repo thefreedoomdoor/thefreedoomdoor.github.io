@@ -1,5 +1,95 @@
 [
   {
+    "title": "2026-11-04 – 11-11 周记：概览",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-11-overview.html",
+    "date": "2026-11-11",
+    "tags": [
+      "周记",
+      "项目"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "十五个活跃项目、十六次主会话、十七张新卡：模型接入与量化调试吃掉了大半周，博客顺手搬上了 Cloudflare。"
+  },
+  {
+    "title": "本周经验卡：量化、剪映与裁脸坐标",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-11-cards.html",
+    "date": "2026-11-11",
+    "tags": [
+      "经验卡",
+      "ComfyUI",
+      "剪映"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "本周十七张卡：展开 H3 长度硬编码、剪映批量导入、接触表裁脸三张，其余按类归纳。"
+  },
+  {
+    "title": "博客：从 GitHub Pages 搬到 Cloudflare Pages",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-11-blog-cloudflare.html",
+    "date": "2026-11-11",
+    "tags": [
+      "博客",
+      "Cloudflare",
+      "部署"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "接上 Cloudflare Pages：push 自动部署、两站逐字节一致，顺带解决沙箱写权限与 8000011 授权报错。"
+  },
+  {
+    "title": "桌面这一周：PDF 打开方式被劫持、C 盘扫描与表情包",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-11-desktop.html",
+    "date": "2026-11-11",
+    "tags": [
+      "Windows",
+      "运维",
+      "杂记"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "从音频增强的注册表权限，到 PDF 关联被劫持、WizTree 扫盘超时，再到给 VTuber 抓表情包——一周的桌面杂事。"
+  },
+  {
+    "title": "minimaxh3：接进 Qwen-Image，以及一次 2bit 量化的失败",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-11-minimaxh3.html",
+    "date": "2026-11-11",
+    "tags": [
+      "minimaxh3",
+      "ComfyUI",
+      "量化",
+      "视频"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "五天内补三处代码把 Qwen-Image-2.1-Turbo 接进 ComfyUI，却证明 Q2_K 量化会摧毁文本条件；顺手修掉 H3 长度硬编码与整轨杂音。"
+  },
+  {
+    "title": "QQbot：三十个提交，从复读治理到登录态告警",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-11-qqbot.html",
+    "date": "2026-11-11",
+    "tags": [
+      "QQbot",
+      "飞书",
+      "运维"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "一周三十个提交：飞书受限指令与回复格式、astrguard 复读治理、健康告警的三种误报，以及登录态告警附二维码。"
+  },
+  {
     "title": "2026-10-30 – 11-06 周记：概览",
     "url": "/inside/blogs/blog/weekly/weekly-2026-11-06-overview.html",
     "date": "2026-11-06",
