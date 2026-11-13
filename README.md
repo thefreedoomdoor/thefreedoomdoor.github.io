@@ -1,8 +1,8 @@
 # thefreedomdoor's blog
 
-个人博客。源文件是 Markdown，用 Node 构建成静态 HTML，托管在 GitHub Pages。
+个人博客。源文件是 Markdown，用 Node 构建成静态 HTML，托管在 Cloudflare Pages（主）与 GitHub Pages（备）。
 
-线上地址：<https://thefreedoomdoor.github.io>
+线上地址：<https://thefreedoomdoor.pages.dev>
 
 ## 结构
 

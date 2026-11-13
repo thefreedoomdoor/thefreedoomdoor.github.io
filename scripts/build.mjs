@@ -696,7 +696,7 @@ async function main() {
       summary: post.summary,
     }));
   await write("assets/data/blog-index.json", JSON.stringify(index, null, 2) + "\n");
-  await write("sitemap.xml", sitemap(site, posts));
+  await write("sitemap.xml", sitemap(site.site, posts));
 
   // 清理上一轮生成、这一轮不再存在的页面（删文章后不留残页）
   try {
