@@ -97,8 +97,6 @@ Cloudflare Pages 项目：
 
 区间 2026-11-04～11-11：15 个活跃项目、16 次主会话、17 张经验卡（视频生成项目 14 张、桌面临时工作区 3 张）；博客侧本周 3 个提交。
 
----
-
 ### 3.7 主站地址统一（2026-11-13）
 
 - `content/site.json` 的 `site.url` 由 `https://thefreedoomdoor.github.io` 改为 `https://thefreedoomdoor.pages.dev`；所有页面的 `og:url` 由构建按该字段生成，重新构建后 28 个页面全部指向新主站。
@@ -106,6 +104,8 @@ Cloudflare Pages 项目：
 - `README.md` 的线上地址同步改为主站 `pages.dev`，并注明 GitHub Pages 为备用。
 - 改动 30 个文件、55 行（22 个文章页 + 首页 + About + 博客全览 + 404 + sitemap + 3 个源文件），提交 `a107c9b`；构建 0.5 秒、22 篇 / 28 页，重复构建 diff 不变（产物幂等）。
 - 期间发现编辑工具会把文件行尾写成 CRLF 造成整文件 diff，已统一转回 LF，只保留真实改动。
+
+---
 
 ## 4. 已知问题 / 待办
 
