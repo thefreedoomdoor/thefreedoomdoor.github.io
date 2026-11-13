@@ -1,5 +1,79 @@
 [
   {
+    "title": "2026-11-11 – 11-13 周记：概览",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-13-overview.html",
+    "date": "2026-11-13",
+    "tags": [
+      "周记",
+      "项目"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "六个活跃项目、四十二段会话：切片工站把出片收成一扇门，博客定下唯一主站，QQbot 被一次掉线逼着修了三处告警盲区。"
+  },
+  {
+    "title": "本地推理网关：把「自动分流」拆成模型注册表",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-13-local-llm.html",
+    "date": "2026-11-13",
+    "tags": [
+      "周记",
+      "本地推理",
+      "NInfer"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "上周定的三级分流被推翻：一个模型名对应一个上游；顺手把 27B 三值模型转成引擎原生格式，逐位核对确认不降智。"
+  },
+  {
+    "title": "博客：定下唯一主站，把交接文档也搬进仓库",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-13-blog.html",
+    "date": "2026-11-13",
+    "tags": [
+      "周记",
+      "博客",
+      "部署"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "主站从 github.io 切到 pages.dev，站点地图里 25 条地址从相对变绝对；定时周记第一次自己跑起来。"
+  },
+  {
+    "title": "剪辑工站：把出片收成一扇门",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-13-clipforge.html",
+    "date": "2026-11-13",
+    "tags": [
+      "周记",
+      "剪辑工站",
+      "剪辑"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "从七个导航、十几次点击，到一页一个按钮：一键出片在真机跑通，45.9 MB 成片、30 秒。"
+  },
+  {
+    "title": "QQbot：一次真正的掉线，换来三处告警修复",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-13-qqbot.html",
+    "date": "2026-11-13",
+    "tags": [
+      "周记",
+      "QQbot",
+      "运维"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "登录票据周三就失效，机器人硬撑到周五下午彻底离线；复盘修掉日志噪声、假恢复和二维码只发一次。"
+  },
+  {
     "title": "2026-11-04 – 11-11 周记：概览",
     "url": "/inside/blogs/blog/weekly/weekly-2026-11-11-overview.html",
     "date": "2026-11-11",

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>博客：定下唯一主站，把交接文档也搬进仓库 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="主站从 github.io 切到 pages.dev，站点地图里 25 条地址从相对变绝对；定时周记第一次自己跑起来。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="博客：定下唯一主站，把交接文档也搬进仓库 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="主站从 github.io 切到 pages.dev，站点地图里 25 条地址从相对变绝对；定时周记第一次自己跑起来。">
+<meta property="og:url" content="https://thefreedoomdoor.pages.dev/inside/blogs/blog/weekly/weekly-2026-11-13-blog.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></div>
+
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>博客：定下唯一主站，把交接文档也搬进仓库</h1>
+        <div class="article-meta">
+          <time datetime="2026-11-13">2026-11-13</time>
+          <span class="dot"></span>
+          <span>753 字 · 2 分钟</span>
+          <span class="dot"></span><span>周记 · 博客 · 部署</span>
+        </div>
+        <p class="article-summary">主站从 github.io 切到 pages.dev，站点地图里 25 条地址从相对变绝对；定时周记第一次自己跑起来。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="接手-先读交接文档" tabindex="-1">接手：先读交接文档</h2>
+<p>周五中午新开一个开发会话接手博客，第一件事不是改代码，而是把交接文档通读一遍，确认「做过什么、还欠什么」。随后把这份文档本体入库存档——从此交接不再是口头约定，而是仓库里一份可追责的 168 行记录，带时间线、约定和已知问题。顺手修了一处分隔线位置，提交三连：文档入库、主站地址统一、分隔线修正。</p>
+<h2 id="主站定下来" tabindex="-1">主站定下来</h2>
+<p>两个地址此前都能用，但对外只能有一个。这周把站点配置里的对外地址从 <a href="http://github.io">github.io</a> 改成 pages.dev，28 个页面的分享元信息（og:url）随之全部改掉。</p>
+<p>改的时候顺手发现一个更隐蔽的毛病：站点地图里 25 条地址全是相对路径。原因不是漏了前缀，而是构建时把<strong>整份站点数据</strong>传给了只读取单个字段的函数，取到的是空值——写成相对路径居然没人发现，因为浏览器能打开。改成传真正那一层数据后，25 条地址全部变成绝对地址。这次改动一共 30 个文件、55 行，构建 0.5 秒、产物幂等。</p>
+<p>另一个反复出现的小事故：编辑工具会把行尾写成 CRLF，导致整文件 diff。统一回 LF 之后，diff 才重新变得可读。</p>
+<h2 id="定时周记第一次自己跑" tabindex="-1">定时周记第一次自己跑</h2>
+<p>上一期是彩排：定时任务刚建好，手动跑了一遍，一次出了 6 篇。这一期是它第一次无人值守运行——采集、对齐上周、写作、构建、提交、推送、验证，整条链路自己走完。这个事实本身就说明定时任务被配对了：它不只会在周五晚上发一条提醒，还会真的把产出落在地上。</p>
+<p>采集环节这周也确认了一件事：旧的会话统计库自周三起就没有新记录了。不是脚本坏了，而是主战场已经迁到新环境——于是统计脚本只能当历史补充，真正的素材改从新环境的会话库里读取。旧库的只读打开还被文件沙箱拦了一次，把连接参数改成不可变只读才绕过去。</p>
+<h2 id="发布链路" tabindex="-1">发布链路</h2>
+<p>流程没变：本地构建必须 0 退出，产物一起提交，push 之后 Cloudflare Pages 十几秒部署完成；GitHub Pages 作为备站同时复核，两个地址都返回 200 且能搜到新标题。已知的几件小事都记在文档里了：不存在的路径返回 308 而不是 404，GitHub Pages 有 10–20 秒缓存，自定义域名继续搁置（账户里还没有域名）。</p>
+<p>这周之后，博客有三个东西是确定的：一个主站、一份会随仓库走的交接文档、一条每周五自己会跑的流水线。</p>
+
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-13-clipforge.html"><span class="dir">← 上一篇</span> 剪辑工站：把出片收成一扇门</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-13-local-llm.html"><span class="dir">下一篇 →</span> 本地推理网关：把「自动分流」拆成模型注册表</a>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E6%8E%A5%E6%89%8B-%E5%85%88%E8%AF%BB%E4%BA%A4%E6%8E%A5%E6%96%87%E6%A1%A3">接手：先读交接文档</a></li><li class="toc-h2"><a href="#%E4%B8%BB%E7%AB%99%E5%AE%9A%E4%B8%8B%E6%9D%A5">主站定下来</a></li><li class="toc-h2"><a href="#%E5%AE%9A%E6%97%B6%E5%91%A8%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E8%87%AA%E5%B7%B1%E8%B7%91">定时周记第一次自己跑</a></li><li class="toc-h2"><a href="#%E5%8F%91%E5%B8%83%E9%93%BE%E8%B7%AF">发布链路</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026-11-11 – 11-13 周记：概览 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="六个活跃项目、四十二段会话：切片工站把出片收成一扇门，博客定下唯一主站，QQbot 被一次掉线逼着修了三处告警盲区。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="2026-11-11 – 11-13 周记：概览 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="六个活跃项目、四十二段会话：切片工站把出片收成一扇门，博客定下唯一主站，QQbot 被一次掉线逼着修了三处告警盲区。">
+<meta property="og:url" content="https://thefreedoomdoor.pages.dev/inside/blogs/blog/weekly/weekly-2026-11-13-overview.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></div>
+
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>2026-11-11 – 11-13 周记：概览</h1>
+        <div class="article-meta">
+          <time datetime="2026-11-13">2026-11-13</time>
+          <span class="dot"></span>
+          <span>1025 字 · 3 分钟</span>
+          <span class="dot"></span><span>周记 · 项目</span>
+        </div>
+        <p class="article-summary">六个活跃项目、四十二段会话：切片工站把出片收成一扇门，博客定下唯一主站，QQbot 被一次掉线逼着修了三处告警盲区。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="这一周" tabindex="-1">这一周</h2>
+<p>六个活跃项目、四十二段会话（其中一部分是无人值守的健康探测）、零张新经验卡。上周的主旋律是「把工具链接通」，这周更接近<strong>把入口收窄</strong>：能跑的东西不少，但每一步都要人记住十几个内部概念，于是三件事同时往「少一次点击」的方向走。</p>
+<p>最大的一块仍是剪辑工站。这周先交了可运行基线，退役掉旧的网页编辑器（一次删掉 2791 行），把精剪交给外部的 OpenChatCut；周三晚到周四晚爬了 75 张表情包并全部去白底；周五则把七个平级导航收成三个正门，一页只回答三个问题：用哪场、点哪里、好了吗。一键出片在真机上跑通了一次完整链路，成片 45.9 MB、30 秒。</p>
+<p>博客这周办完两件事：主站从 GitHub Pages 切到 Cloudflare Pages，站点配置里的对外地址改了，28 个页面的分享元信息跟着改；顺带修掉一个更隐蔽的毛病——站点地图里 25 条地址一直是相对路径，因为构建脚本把整份站点数据传给了只读单个字段的函数。周五这期周记，是定时任务第一次无人值守跑起来。</p>
+<p>QQbot 是被一次真实事故推着走的：登录票据三天前就失效了，机器人靠旧会话硬撑到周五下午，然后彻底离线。复盘修掉三处告警盲区（日志噪声把关键窗口挤掉、静默被当成健康、二维码只随告警发一次），顺手解决「单发一个问号」的老毛病。</p>
+<h2 id="和上周对账" tabindex="-1">和上周对账</h2>
+<p>上周留了四件事，逐条看：</p>
+<ul>
+<li><strong>minimaxh3 换 Q4_K 以上精度复测</strong> —— 只走到一半。周三中午把 Q4_K 制品拉回了本地，但本周没有再开会话复测，文本条件那条结论仍停在 2bit 上。欠账。</li>
+<li><strong>把关键帧、分段、拼接串成一条命令</strong> —— 换了战场完成。不是剪映脚本，而是剪辑工站里的一键出片：分析、找高光、切片、精剪、渲染串成一个任务，外部编辑器只留精修。</li>
+<li><strong>QQbot 告警降噪与飞书通道权限边界</strong> —— 前半件被一次掉线直接打穿，三处盲区都修了；飞书权限边界没动，欠第三周。</li>
+<li><strong>博客定时周记上线，决定 pages.dev 是否唯一主站</strong> —— 都完成了。主站定在 pages.dev，这期周记就是定时器的第一次正式运行。</li>
+</ul>
+<h2 id="节奏" tabindex="-1">节奏</h2>
+<p>周三白天收尾博客脱敏、给剪辑工站交基线并退役旧编辑器；周三晚到周四晚爬表情包；周四上午完成外部剪辑器迁移，全天补体验；周五上午交接博客、中午起重构剪辑工站，下午课业实验并行，傍晚抢修 QQbot 掉线，晚上定时周记开跑。</p>
+<h2 id="其他" tabindex="-1">其他</h2>
+<p>课业那边这周是「穷举验证周」：先用 Logisim 把运算器实验的 7 个电路逐个验证并导出；再用 Python 生成电路 XML，重建 5 位阵列乘法器和 6 位补码阵列乘法器，靠穷举把每种输入都跑一遍。另外交了两份报告：计算机组成原理的协议分析、Spark MLlib 的实验报告。工具上装了一个新的 CLI（MotionHarness），还有一段会话专门查本机 8080 端口被谁占着。</p>
+<h2 id="下周" tabindex="-1">下周</h2>
+<ul>
+<li>剪辑工站：把工作区里 123 个改动文件收成一次像样的提交，再补 P1-4 实时弹幕峰值提醒（唯一没动的 P1）</li>
+<li>QQbot：盯两天「单发？」和登录告警的实际表现，然后把工作区那份修复提交</li>
+<li>minimaxh3：Q4_K 复测补上，这是第二次欠</li>
+<li>本地推理网关：看 3.5 万 token 的 L2 池子够不够用，决定要不要真的启用</li>
+<li>课业：把阵列乘法器的穷举验证脚本归档成能一键复跑的一份</li>
+</ul>
+
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-13-local-llm.html"><span class="dir">← 上一篇</span> 本地推理网关：把「自动分流」拆成模型注册表</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <span></span>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E8%BF%99%E4%B8%80%E5%91%A8">这一周</a></li><li class="toc-h2"><a href="#%E5%92%8C%E4%B8%8A%E5%91%A8%E5%AF%B9%E8%B4%A6">和上周对账</a></li><li class="toc-h2"><a href="#%E8%8A%82%E5%A5%8F">节奏</a></li><li class="toc-h2"><a href="#%E5%85%B6%E4%BB%96">其他</a></li><li class="toc-h2"><a href="#%E4%B8%8B%E5%91%A8">下周</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
+</body>
+</html>

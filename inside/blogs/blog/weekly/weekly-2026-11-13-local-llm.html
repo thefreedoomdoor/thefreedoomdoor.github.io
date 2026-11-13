@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>本地推理网关：把「自动分流」拆成模型注册表 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="上周定的三级分流被推翻：一个模型名对应一个上游；顺手把 27B 三值模型转成引擎原生格式，逐位核对确认不降智。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="本地推理网关：把「自动分流」拆成模型注册表 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="上周定的三级分流被推翻：一个模型名对应一个上游；顺手把 27B 三值模型转成引擎原生格式，逐位核对确认不降智。">
+<meta property="og:url" content="https://thefreedoomdoor.pages.dev/inside/blogs/blog/weekly/weekly-2026-11-13-local-llm.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></div>
+
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>本地推理网关：把「自动分流」拆成模型注册表</h1>
+        <div class="article-meta">
+          <time datetime="2026-11-13">2026-11-13</time>
+          <span class="dot"></span>
+          <span>1196 字 · 3 分钟</span>
+          <span class="dot"></span><span>周记 · 本地推理 · NInfer</span>
+        </div>
+        <p class="article-summary">上周定的三级分流被推翻：一个模型名对应一个上游；顺手把 27B 三值模型转成引擎原生格式，逐位核对确认不降智。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="方案被推翻-一个模型名一个上游" tabindex="-1">方案被推翻：一个模型名一个上游</h2>
+<p>上周的设想是「网关按分数自动选 L1 / L2 / L3，粘性保持、跨档降级」。这周它被推翻了，理由也很直接：自动选档意味着用户永远不知道自己拿到的是哪个模型，出问题也没法复现。新的规则只有一句：</p>
+<p>请求里的模型名 → 查注册表 → 直接转发到该条目对应的上游。</p>
+<p>不再打分、不再粘性、不再跨档降级。写错模型名直接 404，响应里列出全部可用 id。配套的几处边界都写死了：L2 请求超出 KV 池返回 413（宁可拒绝，也不接受引擎那种「200 但答案不可信」的结果），L3 云端预算耗尽返回 429，L2 引擎惰性启动失败返回 503。原来的打分模块保留但不再被调用，路由测试整体重写成 17 条断言。</p>
+<h2 id="转换-官方工具不吃-ptq1" tabindex="-1">转换：官方工具不吃 PTQ1</h2>
+<p>引擎只认自家的 <code>.ninfer</code> 制品，源仓库提供的转换器有个硬编码：每个三值张量类型写死成 <code>PQ2_0</code>，校验时逐个比对类型名，不匹配就抛错。真机实测确认——拿 PTQ1_0 的 GGUF 配官方配方，校验阶段直接失败。</p>
+<p>但底层是支持的：读取层两种类型都能读，制品格式里有 <code>ptq1_g128_fp16</code> 的打包分支，导入白名单里也写着它——<strong>只有配方的校验层不放行</strong>。于是打了一个参数化补丁，注册一条 PTQ1 配方。补丁生效后又撞上第二个缺口：这条流水线调用制品写入器时从不传身份信息，而制品结构强制要求模型 id 和权重 id，等于任何配方都写不出制品。补上第二个补丁，在真机上把 27B 三值模型转了出来：5,943,417,600 字节（5.535 GiB），322 个三值张量，身份字段齐全。</p>
+<p>意义在于：8 GB 卡从此不再依赖内测包里预置的那份制品，可以自己转。</p>
+<h2 id="到底降没降智" tabindex="-1">到底降没降智</h2>
+<p>转换完第一反应是「那质量会不会掉」。做了三层核对：</p>
+<ol>
+<li>三值编解码来回一遍，在输出头、词嵌入、注意力门、QKV、前馈等张量上<strong>逐字节相同</strong>；</li>
+<li>GGUF 里的三值总字节 5,877,760,000，与制品里的同格式总字节完全相等；</li>
+<li>输出头解出来的缩放与编码，与源 GGUF 逐参数相等，三值直方图三档计数也完全一致。</li>
+</ol>
+<p>结论：转换无损，权重与源文件逐位等价。观感上的「变笨」来自另外两个地方：一是默认开启的三值加速开关，实测快了两个数量级、质量差异不超过 0.016%（关掉它才是给 A/B 测试用的慢速路径）；二是 KV 缓存精度，选用的档位困惑度只涨 0.30%。真正更大的影响是<strong>池子只有 35,008 token</strong>，而 8 GB 档的规格是 66,432——因为 8 GB 显存里只剩 6,992 MiB 空闲，桌面程序占了另一半。</p>
+<h2 id="接进日常工具" tabindex="-1">接进日常工具</h2>
+<p>网关用市场插件 <code>dsh-ai-gateway-provider</code> v0.7.2 注册成日常工具里的一个 provider：插件启动时拉一次模型列表，把每个模型映射成可选项，凭据走系统的凭据存储。为此网关补了 <code>GET /v1/models</code>，把注册表里的条目全列出来。</p>
+<p>L2 引擎改成了惰性启动（默认开）：网关启动时不拉起 27B，等第一个真正需要 L2 的请求到达才按需启动。好处是模型列表在引擎没起来时也能看见；实测首个请求阻塞约 100 秒（8 GB 卡加载 5.535 GiB 制品）后返回 200，路由头标记为 L2。</p>
+<h2 id="平台坑" tabindex="-1">平台坑</h2>
+<p>Windows 上这四条都是硬约束：每个可执行文件只支持一种架构；监听本机回环地址时偶尔会卡在 SYN_SENT；仓库不带运行时 DLL，得自己凑齐；批处理必须纯 ASCII + CRLF，PowerShell 脚本必须 UTF-8 带 BOM——否则中文乱码或解析失败。另外两处文档与现实不符：Release 标签里的日期已经 404，唯一发布的是十月八日那个；官方包里的 curl 运行时叫 <code>libcurl-x64.dll</code> 而不是文档写的 <code>libcurl.dll</code>。</p>
+<h2 id="小结" tabindex="-1">小结</h2>
+<p>这条链现在的定位是「本地 L2 兜底」：日常走 L1 小模型，真需要长上下文时按需拉起 27B，云端作为第三档预算受限。下一步是观察 3.5 万 token 的池子在真实任务里够不够——不够的话，得先关掉几个吃显存的桌面程序。</p>
+
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-13-blog.html"><span class="dir">← 上一篇</span> 博客：定下唯一主站，把交接文档也搬进仓库</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-13-overview.html"><span class="dir">下一篇 →</span> 2026-11-11 – 11-13 周记：概览</a>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E6%96%B9%E6%A1%88%E8%A2%AB%E6%8E%A8%E7%BF%BB-%E4%B8%80%E4%B8%AA%E6%A8%A1%E5%9E%8B%E5%90%8D%E4%B8%80%E4%B8%AA%E4%B8%8A%E6%B8%B8">方案被推翻：一个模型名一个上游</a></li><li class="toc-h2"><a href="#%E8%BD%AC%E6%8D%A2-%E5%AE%98%E6%96%B9%E5%B7%A5%E5%85%B7%E4%B8%8D%E5%90%83-ptq1">转换：官方工具不吃 PTQ1</a></li><li class="toc-h2"><a href="#%E5%88%B0%E5%BA%95%E9%99%8D%E6%B2%A1%E9%99%8D%E6%99%BA">到底降没降智</a></li><li class="toc-h2"><a href="#%E6%8E%A5%E8%BF%9B%E6%97%A5%E5%B8%B8%E5%B7%A5%E5%85%B7">接进日常工具</a></li><li class="toc-h2"><a href="#%E5%B9%B3%E5%8F%B0%E5%9D%91">平台坑</a></li><li class="toc-h2"><a href="#%E5%B0%8F%E7%BB%93">小结</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
+</body>
+</html>

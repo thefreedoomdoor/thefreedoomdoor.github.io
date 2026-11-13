@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>剪辑工站：把出片收成一扇门 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="从七个导航、十几次点击，到一页一个按钮：一键出片在真机跑通，45.9 MB 成片、30 秒。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="剪辑工站：把出片收成一扇门 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="从七个导航、十几次点击，到一页一个按钮：一键出片在真机跑通，45.9 MB 成片、30 秒。">
+<meta property="og:url" content="https://thefreedoomdoor.pages.dev/inside/blogs/blog/weekly/weekly-2026-11-13-clipforge.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></div>
+
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>剪辑工站：把出片收成一扇门</h1>
+        <div class="article-meta">
+          <time datetime="2026-11-13">2026-11-13</time>
+          <span class="dot"></span>
+          <span>1236 字 · 3 分钟</span>
+          <span class="dot"></span><span>周记 · 剪辑工站 · 剪辑</span>
+        </div>
+        <p class="article-summary">从七个导航、十几次点击，到一页一个按钮：一键出片在真机跑通，45.9 MB 成片、30 秒。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="起点-能跑-但不好用" tabindex="-1">起点：能跑，但不好用</h2>
+<p>周三先交了一份可运行基线——551 项测试通过、端到端自检 PASS——同一天把旧的网页编辑器整个退役了。三个文件（时间线、预览、旧编辑器）一次删掉 2791 行，页面只保留路由。第二天上午把精剪迁到外部的 OpenChatCut：25 个文件、+4179/−1120，旧的 MLT 工程层直接删掉。四个并行任务分头写 MCP 客户端（794 行）、计划编译（563 行）、前端卡片和文档，晚上做真机验收。</p>
+<p>能跑之后问题才显出来：出片主路径跨 4 个页面、大约 12 次点击，界面上全是内部概念——弹幕热力、声纹、视觉模型、语音识别、代理、MCP、权重、剪辑决策表。所以周五的改造原则只有一句：<strong>只动入口与默认值，底层管线一行不删</strong>。七个平级导航收成三个正门（工作台 / 素材 / 设置），其余藏进「更多工具」；旧地址全部保留可直达，前端路由测试守住没有孤儿模块。</p>
+<h2 id="表情包-爬-75-张-先扣图-再让它真的被选中" tabindex="-1">表情包：爬 75 张，先扣图，再让它真的被选中</h2>
+<p>周三晚开始按情绪语义爬 irasutoya 的免费素材，文件名直接用语义说话（尴尬_001.jpg），到周四晚交付 75 张。因为原图全是白底 JPEG，又写了一套重建流程把 65 张转成透明 PNG，全量复检边缘近白像素占比是 0.000。</p>
+<p>周四晚做最后自查时发现一个更尴尬的问题：素材进了库，自动精剪却<strong>永远选不中</strong>其中的 47 张。原因是贴纸的标签体系里，第一顺位标签必须是 12 个表情语义之一，而那 47 张的标签是画风词。把语义标签接通之后，选图才真正生效。顺带还堵了一个坑：内置素材生成脚本会整份覆盖清单，重跑一次就会把 65 个外部条目清空。</p>
+<h2 id="策略转向-精剪交出去" tabindex="-1">策略转向：精剪交出去</h2>
+<p>周四用户给了一句话：所有剪辑和素材都直接导入 OpenChatCut，本工站只提供切片、分段、人声分离和素材，精剪只留传送门。于是本地 AI 精剪从主路径降级为「可选草稿」，同步时把素材库一起送进对方媒体池，界面上显示「素材库：82/82 个…已进媒体池」。</p>
+<p>这一转向连带修了一串坑：外部语音识别接上后暴露出分块丢 183 秒的 bug；「同步并打开」既踩过浏览器拦截，又踩过窗口置顶失败（附加线程输入、强制前置、置顶、二次启动全部无效，最后改成直接切到桌面版）；导入改成默认不分段，另加批量同步；默认画幅从竖屏 9:16 改回 16:9；没有字幕时也用关键词花字、表情包、音效让精剪「看得见」。</p>
+<h2 id="一扇门" tabindex="-1">一扇门</h2>
+<p>周五的工作台一页只回答三件事：用哪场（缩略图 + 时长 + 换一场）、点哪里（一个巨大的「一键出片 N 条」）、好了吗（六步进度 / 成片墙 / 人话报错）。</p>
+<p>后端没有重写任何老任务函数，而是加了一层垫片：把每个子任务用到的成员垫出来，再把子任务进度线性映射进它自己那一段区间，于是读素材、分析、找爆点、切片、精剪、渲染六个老函数一行不改就能串成一条任务。选项出厂即最优（6 条、6–30 秒、28 秒目标、1080p 竖屏、烧字幕），非法值静默回落；挑回放时按磁盘实况选「最新且文件还在」的那场，全丢了就给一句人话。</p>
+<p>报错也翻译成人话：没找到够格的爆点、这一场的爆点之前已经剪过了、读不出声音或弹幕。任务 id 存进本地存储，切页回来能自动接回进行中的任务；单条失败进警告列表，不拖垮整批。</p>
+<p>真机验收：81 个旧项目里只有 3 个回放文件还在，默认落到「可播」的那一场。一键出片（单条）全链路成功，成片 45.9 MB，实测 h264 1080×1920、30fps、AAC 双声道、正好 30.0 秒。同一场再跑一次，找爆点阶段跳过已采纳窗口，报「这一场的爆点之前已经剪过了」。回放被删掉的项目则直接标成不可出片并给出下一步，而不是先显示能出片、再崩在半路。</p>
+<h2 id="账还没还" tabindex="-1">账还没还</h2>
+<p>测试从 803 涨到 823 项（81.3 秒），端到端自检 24.1 秒。但仓库里还压着 123 个改动文件没提交——这周的大部分成果都在工作区。下周第一件事是把它收成提交，然后补唯一没动的 P1：实时弹幕峰值提醒。</p>
+
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-13-qqbot.html"><span class="dir">← 上一篇</span> QQbot：一次真正的掉线，换来三处告警修复</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-13-blog.html"><span class="dir">下一篇 →</span> 博客：定下唯一主站，把交接文档也搬进仓库</a>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E8%B5%B7%E7%82%B9-%E8%83%BD%E8%B7%91-%E4%BD%86%E4%B8%8D%E5%A5%BD%E7%94%A8">起点：能跑，但不好用</a></li><li class="toc-h2"><a href="#%E8%A1%A8%E6%83%85%E5%8C%85-%E7%88%AC-75-%E5%BC%A0-%E5%85%88%E6%89%A3%E5%9B%BE-%E5%86%8D%E8%AE%A9%E5%AE%83%E7%9C%9F%E7%9A%84%E8%A2%AB%E9%80%89%E4%B8%AD">表情包：爬 75 张，先扣图，再让它真的被选中</a></li><li class="toc-h2"><a href="#%E7%AD%96%E7%95%A5%E8%BD%AC%E5%90%91-%E7%B2%BE%E5%89%AA%E4%BA%A4%E5%87%BA%E5%8E%BB">策略转向：精剪交出去</a></li><li class="toc-h2"><a href="#%E4%B8%80%E6%89%87%E9%97%A8">一扇门</a></li><li class="toc-h2"><a href="#%E8%B4%A6%E8%BF%98%E6%B2%A1%E8%BF%98">账还没还</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
+</body>
+</html>
