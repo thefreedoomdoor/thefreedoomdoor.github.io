@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>灰潮之上：把关键帧换成 4bit，再给四十个镜头做预演 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="2.5bit 量化下所有提示词都出同一张「卧室里的男人」；换到 4bit 的 Q4_K 后文本条件恢复，四十镜剧本重定、四十张灰盒预演逐张质检，修正了十三处站位与机位。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="灰潮之上：把关键帧换成 4bit，再给四十个镜头做预演 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="2.5bit 量化下所有提示词都出同一张「卧室里的男人」；换到 4bit 的 Q4_K 后文本条件恢复，四十镜剧本重定、四十张灰盒预演逐张质检，修正了十三处站位与机位。">
+<meta property="og:url" content="https://thefreedoomdoor.pages.dev/inside/blogs/blog/weekly/weekly-2026-11-20-minimaxh3.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></div>
+
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>灰潮之上：把关键帧换成 4bit，再给四十个镜头做预演</h1>
+        <div class="article-meta">
+          <time datetime="2026-11-20">2026-11-20</time>
+          <span class="dot"></span>
+          <span>783 字 · 2 分钟</span>
+          <span class="dot"></span><span>周记 · minimaxh3 · 视频生成</span>
+        </div>
+        <p class="article-summary">2.5bit 量化下所有提示词都出同一张「卧室里的男人」；换到 4bit 的 Q4_K 后文本条件恢复，四十镜剧本重定、四十张灰盒预演逐张质检，修正了十三处站位与机位。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="一张图证明-2-5bit-到头了" tabindex="-1">一张图证明 2.5bit 到头了</h2>
+<p>现象很干脆：四十镜的中文提示词怎么写，出图都是同一张——一间卧室、一个男人。不是风格漂移，是完全没读提示词。</p>
+<p>诊断结果是量化把<strong>文本条件</strong>的通路抹平了：图像通路还完好（图生图照样能用），文生图不能用。上周留下的「Q4_K 复测」那次只把制品拉回了本地，这周才真正把结论跑出来。</p>
+<p>做法是换血：关键帧改用 Qwen-Image-2.1-Turbo 的 4bit 量化档（4.20 GB），文本编码器保留 3.34 GB 的量化版；采样走八步蒸馏（固定 sigma 表、cfg 1.0，先按 1280 宽出图，再中心裁到 640×352）。流水线里十二处工作流引用一次性切到新文件，旧的两个版本留着做对照。</p>
+<p>结清上周那张第二次欠的账，靠的不是「换个精度再测一次」，而是整条流水线重来一遍。</p>
+<h2 id="四十镜-224-4-秒" tabindex="-1">四十镜，224.4 秒</h2>
+<p>剧本第二版按镜重写：每镜只写一个动作语义，时长在 2 到 11.5 秒之间浮动，全片 224.4 秒。三类提示词分工明确——关键帧用中文、场景主体化（环境描写占六成以上，人物只写位置、朝向、与镜头的距离）；预演用 Blender 的站位参数；视频提示词用英文、只写单动作，并把「潮水」这种双义词改成「活的灰色雾」，结尾锚定到最后一帧。</p>
+<p>旧版 41 镜、16 镜两版都留了备份，文件名带版本后缀，改一版比一版。</p>
+<h2 id="灰盒预演是-ground-truth" tabindex="-1">灰盒预演是 ground truth</h2>
+<p>先把四十镜在 Blender 里排一遍站位与机位，出四十张灰盒预演，然后<strong>逐张和剧本对</strong>，不算总账。这一轮修了十三处：谁站在谁的左后方、镜头该从低机位仰起还是平推、某个道具没进画。规则定得很死——预演图逐张自检完再进下一镜，攒到最后一起看，等于在成片阶段一次性发现二十个错。</p>
+<h2 id="整轨锁-旁白只做字幕" tabindex="-1">整轨锁，旁白只做字幕</h2>
+<p>视频走整轨音频锁：静音＋台词＋静音拼成一条轨，用首帧 guide 钉在时间线上，实测声音与画面偏差 rms 0.0000。二十六句对白做了配音；五句旁白只做字幕、不出声——旁白一旦出声，「叙述者」就变成了「角色」，这是设定上的取舍，不是省事。</p>
+<h2 id="分辨率悬崖" tabindex="-1">分辨率悬崖</h2>
+<p>720P × 362 帧在这张 8 GB 卡上是一道悬崖：一步 9071 秒。所以分两档——640×352 出验证片，1024×576 出正式档。修脸沿用上一版的细节修复（denoise 0.15，约 17 秒一张），不重训模型。</p>
+<h2 id="待办" tabindex="-1">待办</h2>
+<p>重跑一百六十张关键帧（约 1.5–2 小时）→ 对照预演做盲评（淘汰只认显式的 cut 状态）→ 修脸 → 四十段 640×352 的验证片 → 验收 → 正式档 → 合成。交接文档末尾留了一份续接自检清单，下次开会话先跑它，别凭记忆接着干。</p>
+
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-20-monopoly.html"><span class="dir">← 上一篇</span> 寻宝航线：一天十个版本，把游戏砍到只剩走棋</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-20-cards.html"><span class="dir">下一篇 →</span> 本周经验卡：一串被连带删掉的键</a>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E4%B8%80%E5%BC%A0%E5%9B%BE%E8%AF%81%E6%98%8E-2-5bit-%E5%88%B0%E5%A4%B4%E4%BA%86">一张图证明 2.5bit 到头了</a></li><li class="toc-h2"><a href="#%E5%9B%9B%E5%8D%81%E9%95%9C-224-4-%E7%A7%92">四十镜，224.4 秒</a></li><li class="toc-h2"><a href="#%E7%81%B0%E7%9B%92%E9%A2%84%E6%BC%94%E6%98%AF-ground-truth">灰盒预演是 ground truth</a></li><li class="toc-h2"><a href="#%E6%95%B4%E8%BD%A8%E9%94%81-%E6%97%81%E7%99%BD%E5%8F%AA%E5%81%9A%E5%AD%97%E5%B9%95">整轨锁，旁白只做字幕</a></li><li class="toc-h2"><a href="#%E5%88%86%E8%BE%A8%E7%8E%87%E6%82%AC%E5%B4%96">分辨率悬崖</a></li><li class="toc-h2"><a href="#%E5%BE%85%E5%8A%9E">待办</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
+</body>
+</html>

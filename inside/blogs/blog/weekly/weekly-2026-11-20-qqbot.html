@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QQbot：十三项审计，十一条是误报 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="只读审计交上来十三条问题，逐条读码加服务器实测推翻十一条；剩下的拆成四批任务清单交给下一个模式接手，本周另修六处静默与重复回复的毛病。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="QQbot：十三项审计，十一条是误报 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="只读审计交上来十三条问题，逐条读码加服务器实测推翻十一条；剩下的拆成四批任务清单交给下一个模式接手，本周另修六处静默与重复回复的毛病。">
+<meta property="og:url" content="https://thefreedoomdoor.pages.dev/inside/blogs/blog/weekly/weekly-2026-11-20-qqbot.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></div>
+
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>QQbot：十三项审计，十一条是误报</h1>
+        <div class="article-meta">
+          <time datetime="2026-11-20">2026-11-20</time>
+          <span class="dot"></span>
+          <span>962 字 · 2 分钟</span>
+          <span class="dot"></span><span>周记 · QQbot · 运维</span>
+        </div>
+        <p class="article-summary">只读审计交上来十三条问题，逐条读码加服务器实测推翻十一条；剩下的拆成四批任务清单交给下一个模式接手，本周另修六处静默与重复回复的毛病。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="审计的第一件事是撤单" tabindex="-1">审计的第一件事是撤单</h2>
+<p>周六把三路只读审计（守卫插件、部署脚本、视频插件）的结论逐条对着源码和服务器复核了一遍。十三条里十一条站不住：</p>
+<ul>
+<li>「凌晨免打扰没生效」——代码用带时区的本地时间判断，服务器上确实有拦截日志，凌晨那条消息根本没进来。</li>
+<li>「限额没生效」——限额按滚动窗口算（每小时、每天各一档），而审计点名的两个函数在代码里<strong>根本不存在</strong>，说明报告是照着想象写的。</li>
+<li>「SSH 密码进了 git 历史」——全历史搜过，没有；八个相关脚本都在忽略规则里。</li>
+<li>「告警演练会真的发消息」——那个参数在调用通知之前就返回了。</li>
+<li>「远程重启缺二次确认」——它是显式开关，不开就不生效。</li>
+</ul>
+<p>复核结论写成一份交接清单时，专门单列一节「已核实为误报，禁止修复」——否则下一轮会话会照着同一个误解再「修」一遍，把好代码改成坏的。</p>
+<h2 id="真正要改的九项" tabindex="-1">真正要改的九项</h2>
+<p>批次 A 九项，主题都是<strong>监控</strong>：</p>
+<ul>
+<li><strong>compose 内存上限漂移</strong>：仓库里写 1024m，服务器实际 1536m。按仓库重建会在视频转写峰值（832–872 MB）时 OOM。</li>
+<li><strong>容器自己的内存看不见</strong>：现有检查只读宿主可用内存（阈值 150 MB，宿主永远差得远），看不到容器逼近它自己的限额。改成读容器 cgroup，占比超 85% 告警。</li>
+<li><strong>重启计数与 OOM 被杀</strong>：非零就报，别等用户来说「它又挂了」。</li>
+<li><strong>「连着但没流量」不再算健康</strong>：窗口内没有事件、且没有一条连接处于已建立状态，才算断线；深夜静默另算。这一条是上周那次假恢复的直接教训。</li>
+<li><strong>定时任务自盲</strong>：健康检查本身靠 cron 跑，cron 掉一行就永远安静。</li>
+<li><strong>表情包目录已经 670 MB</strong>（单个包 464 MB），而现有检查只看 1 MB 的视频分镜缓存。</li>
+<li><strong>日志无界增长</strong>：每分钟一行「无新指令」的日志从不轮转，正是十天前那次磁盘写满的复发路径。</li>
+<li><strong>两处日志被截断重建</strong>（279 KB 变 274 B），来源未查。</li>
+<li>每项补单测，全量跑通再上服务器。</li>
+</ul>
+<h2 id="本周修掉的六件" tabindex="-1">本周修掉的六件</h2>
+<ul>
+<li>记忆 v2 上线，旧的凌晨建库任务删掉，三个活跃会话按会话播种记忆，配置里留了一键回滚开关。</li>
+<li>看门狗超时不再发任何提示——之前是「沉默一阵后回一句催促」，用户看到的是一条毫无意义的消息。</li>
+<li>视频卡片识别改成按字段提取：摘要和封面里出现的视频号不再误触发，转发卡整张忽略。</li>
+<li>思考过程在 provider 层持久关闭（之前每轮都在配置里关一次）；天气备用源的缓存、翻译、超时一起修。</li>
+<li>自检全正常时不再重复「其余 N 项正常」；插件指令不再计入每小时、每天的对话限额。</li>
+<li>重复回复的补丁加强：被截断的前缀也挡得住，工具调用后第二轮的重复回复整条丢弃。</li>
+</ul>
+<h2 id="欠账" tabindex="-1">欠账</h2>
+<p>非 B 站视频卡片的复测还欠着：插件升到 0.7.1，但这几天没人再发一张非 B 站卡片，日志里「卡片里没有视频链接」的计数仍是 0——没样本，等于没验。声音事件的真实正样本也只跑过一次。</p>
+<p>另一笔更大的欠账：本周所有改动都直接落在服务器上，本地仓库最后一次提交停在 11-07。批次 A 上线时，这些改动应该一起收进去。</p>
+
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-20-trellis2.html"><span class="dir">← 上一篇</span> TRELLIS.2：二十万面的网格，压到两万面反而更像</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-20-monopoly.html"><span class="dir">下一篇 →</span> 寻宝航线：一天十个版本，把游戏砍到只剩走棋</a>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E5%AE%A1%E8%AE%A1%E7%9A%84%E7%AC%AC%E4%B8%80%E4%BB%B6%E4%BA%8B%E6%98%AF%E6%92%A4%E5%8D%95">审计的第一件事是撤单</a></li><li class="toc-h2"><a href="#%E7%9C%9F%E6%AD%A3%E8%A6%81%E6%94%B9%E7%9A%84%E4%B9%9D%E9%A1%B9">真正要改的九项</a></li><li class="toc-h2"><a href="#%E6%9C%AC%E5%91%A8%E4%BF%AE%E6%8E%89%E7%9A%84%E5%85%AD%E4%BB%B6">本周修掉的六件</a></li><li class="toc-h2"><a href="#%E6%AC%A0%E8%B4%A6">欠账</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
+</body>
+</html>

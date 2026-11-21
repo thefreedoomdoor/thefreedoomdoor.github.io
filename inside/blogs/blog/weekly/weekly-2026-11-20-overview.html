@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026-11-14 – 11-20 周记：概览 · thefreedomdoor&#39;s blog</title>
+<meta name="description" content="十一个项目目录、七十六段会话、十一张新卡：周五一天连发十个版本把游戏砍到只剩走棋，把关键帧换成 4bit 重定四十镜预演，还删掉了一个用了半个月的推理网关。">
+<meta name="theme-color" content="#08090a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="2026-11-14 – 11-20 周记：概览 · thefreedomdoor&#39;s blog">
+<meta property="og:description" content="十一个项目目录、七十六段会话、十一张新卡：周五一天连发十个版本把游戏砍到只剩走棋，把关键帧换成 4bit 重定四十镜预演，还删掉了一个用了半个月的推理网关。">
+<meta property="og:url" content="https://thefreedoomdoor.pages.dev/inside/blogs/blog/weekly/weekly-2026-11-20-overview.html">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/print.css" media="print">
+<link rel="stylesheet" href="/assets/css/prose.css">
+
+</head>
+<body class="">
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="brand" href="/">thefreedomdoor<span class="brand-dot">.</span></a>
+    <nav class="nav-links" aria-label="主导航"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><span></span></div>
+</header>
+<div class="mobile-menu" id="mobileMenu"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/inside/blog.html" aria-current="page">Blog</a><a class="nav-link" href="/inside/about.html">ContactMe</a></div>
+
+<main class="article-page">
+  <div class="article-shell">
+    <article class="article">
+      <header class="article-head">
+        <p class="kicker">NOTE · 2026</p>
+        <h1>2026-11-14 – 11-20 周记：概览</h1>
+        <div class="article-meta">
+          <time datetime="2026-11-20">2026-11-20</time>
+          <span class="dot"></span>
+          <span>1060 字 · 3 分钟</span>
+          <span class="dot"></span><span>周记 · 项目</span>
+        </div>
+        <p class="article-summary">十一个项目目录、七十六段会话、十一张新卡：周五一天连发十个版本把游戏砍到只剩走棋，把关键帧换成 4bit 重定四十镜预演，还删掉了一个用了半个月的推理网关。</p>
+      </header>
+      <div class="article-body prose">
+<h2 id="这一周" tabindex="-1">这一周</h2>
+<p>十一个项目目录、七十六段会话、十一张新经验卡。上周的主旋律是「把入口收窄」，这周更像<strong>一天之内把一件事做完</strong>：周五从上午十一点到晚上十一点，大富翁从 v3.0.0 一路推到 v3.5.0，发了十个版本包；同一天《灰潮之上》把关键帧通路整个换掉，并把四十镜预演逐张过了一遍；TRELLIS.2 补完重拓扑打分和保真绑骨。</p>
+<p>删掉的比加上的多。周三把用了半个月的本地推理网关整棵树删掉——四万多个文件、31.8 GB，其中一大半是虚拟环境——删之前把两万行的手册压成一份一百六十多 KB 的原理恢复笔记。周五 v3.5.0 又把道具与技能牌系统从界面上连根拔掉，礼物表从十几列砍成四列。这周真正的主线是：<strong>先停掉不再产生价值的那一半，再谈下一步</strong>。</p>
+<p>博客这边是一次补课：周五晚的定时任务起了会话，却一行产出都没有，这期是周六手工补的。</p>
+<h2 id="和上周对账" tabindex="-1">和上周对账</h2>
+<p>上周留了五件事：</p>
+<ul>
+<li><strong>剪辑工站收 123 个改动 + 补 P1-4 弹幕峰值提醒</strong> —— 一件没动。整个窗口里切片工站零会话，123 个改动仍在工作区，P1-4 还标着「未开始」。这是它第二次出现在「下周」清单上。</li>
+<li><strong>QQbot 盯「单发？」与登录告警，再把 12 个改动文件提交</strong> —— 一半。重复回复这周被连修两次（先入 corepatch，再加「截断前缀也挡」「工具调用后的第二轮整条丢弃」）；提交没做，本地仓库还停在 11-07，本周所有改动都直接落在服务器上。</li>
+<li><strong>minimaxh3 复测 Q4_K（第二次欠）</strong> —— 结清，而且结论比预期重。Q2_K 下所有提示词都出同一张「卧室里的男人」；换到 4bit 的 Q4_K 后文本条件恢复，流水线里十二处工作流引用一次性切过去。</li>
+<li><strong>本地推理网关的 3.5 万 token 池子够不够</strong> —— 不用回答了。周三决定删掉整个项目，连同模型接口一起从日常工具里摘掉。</li>
+<li><strong>课业：阵列乘法器穷举脚本归档成一键复跑</strong> —— 没做。本周课业只剩两份报告和一批零散小任务。</li>
+</ul>
+<h2 id="节奏" tabindex="-1">节奏</h2>
+<p>周六给 QQbot 做了三路只读审计，把结论写成一份交接任务清单；周日、周一交课业报告（协议分析、大数据与云计算）；周二开了视频转 GIF 的小工具，另有一段会话在做别的零散活；周三删掉推理网关、清了一次 C 盘、顺手排查剪贴板工具粘不出历史记录的问题；周四 QQbot 全天（配置对齐、六处修复）与 TRELLIS.2 交替；周五是大富翁十连发 + 《灰潮之上》交接文档，一直干到晚上十一点。周六补这期周记。</p>
+<h2 id="其他" tabindex="-1">其他</h2>
+<p>小说《灰潮之上》的章节在另一条线上重写：第一章出了 20 KB 的重写版并重排成 docx，三到九章各有一份构建脚本，其中六到九章还只是占位。TRELLIS.2 那篇独立成文，这里只记一句：它离「一句话生成一个能直接进引擎的角色」又近了一格。</p>
+<p>课业那边剩下的都是短会话：报告排版、图表、几段实验数据核对。多语言提示词的小测试混在同一批会话里，数量看着多，实际十分钟一段。</p>
+<h2 id="下周" tabindex="-1">下周</h2>
+<ul>
+<li>大富翁：拿 v3.5.0 在真实直播间跑一场，看「删掉道具之后」礼物流水还撑不撑得住节奏</li>
+<li>《灰潮之上》：重跑一百六十张关键帧、盲评、修脸，再出四十镜的 640×352 验证片</li>
+<li>TRELLIS.2：把绑骨接进 MCP 默认链路，补上 unirig 后端的安装与回退测试</li>
+<li>QQbot：批次 A 的九项监控检查落地上服务器，同时把服务器上的改动收进 git</li>
+<li>剪辑工站：123 个改动 + P1-4（第三次列进清单）</li>
+</ul>
+
+      </div>
+      <footer class="article-foot">
+        <a href="/inside/blogs/blog/weekly/weekly-2026-11-20-cards.html"><span class="dir">← 上一篇</span> 本周经验卡：一串被连带删掉的键</a>
+        <a href="/inside/blog.html"><span class="dir">目录</span></a>
+        <span></span>
+      </footer>
+    </article>
+    <nav class="toc" aria-label="文章目录">
+  <p class="toc-title">Contents</p>
+  <ul><li class="toc-h2"><a href="#%E8%BF%99%E4%B8%80%E5%91%A8">这一周</a></li><li class="toc-h2"><a href="#%E5%92%8C%E4%B8%8A%E5%91%A8%E5%AF%B9%E8%B4%A6">和上周对账</a></li><li class="toc-h2"><a href="#%E8%8A%82%E5%A5%8F">节奏</a></li><li class="toc-h2"><a href="#%E5%85%B6%E4%BB%96">其他</a></li><li class="toc-h2"><a href="#%E4%B8%8B%E5%91%A8">下周</a></li></ul>
+</nav>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <span>© 2026 thefreedomdoor</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/toc.js" defer></script>
+</body>
+</html>

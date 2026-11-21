@@ -1,5 +1,93 @@
 [
   {
+    "title": "2026-11-14 – 11-20 周记：概览",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-20-overview.html",
+    "date": "2026-11-20",
+    "tags": [
+      "周记",
+      "项目"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "十一个项目目录、七十六段会话、十一张新卡：周五一天连发十个版本把游戏砍到只剩走棋，把关键帧换成 4bit 重定四十镜预演，还删掉了一个用了半个月的推理网关。"
+  },
+  {
+    "title": "本周经验卡：一串被连带删掉的键",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-20-cards.html",
+    "date": "2026-11-20",
+    "tags": [
+      "经验卡",
+      "大富翁",
+      "minimaxh3"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "本周十一张卡：展开「删大段字面量连带删掉相邻键」「礼物是 protobuf」「端口落在系统保留区」三张，其余八张按类归纳。"
+  },
+  {
+    "title": "灰潮之上：把关键帧换成 4bit，再给四十个镜头做预演",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-20-minimaxh3.html",
+    "date": "2026-11-20",
+    "tags": [
+      "周记",
+      "minimaxh3",
+      "视频生成"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "2.5bit 量化下所有提示词都出同一张「卧室里的男人」；换到 4bit 的 Q4_K 后文本条件恢复，四十镜剧本重定、四十张灰盒预演逐张质检，修正了十三处站位与机位。"
+  },
+  {
+    "title": "寻宝航线：一天十个版本，把游戏砍到只剩走棋",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-20-monopoly.html",
+    "date": "2026-11-20",
+    "tags": [
+      "周记",
+      "直播大富翁"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "v3.0.0 到 v3.5.0，十二个小时里连发十个版本包：先把藏宝图做成 3D、修登录与鼠标，再把道具、技能牌、碎片换卡整套删掉，礼物表只剩四列。"
+  },
+  {
+    "title": "QQbot：十三项审计，十一条是误报",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-20-qqbot.html",
+    "date": "2026-11-20",
+    "tags": [
+      "周记",
+      "QQbot",
+      "运维"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "只读审计交上来十三条问题，逐条读码加服务器实测推翻十一条；剩下的拆成四批任务清单交给下一个模式接手，本周另修六处静默与重复回复的毛病。"
+  },
+  {
+    "title": "TRELLIS.2：二十万面的网格，压到两万面反而更像",
+    "url": "/inside/blogs/blog/weekly/weekly-2026-11-20-trellis2.html",
+    "date": "2026-11-20",
+    "tags": [
+      "周记",
+      "TRELLIS",
+      "3D"
+    ],
+    "folder": [
+      "weekly"
+    ],
+    "pin": false,
+    "summary": "给生成网格加一条可选后处理链，十分制里原模型 96.40、自动两万面 99.76；绑骨改成「低模代理算权重、再转移回原模」，顺手删掉一处把模型搬偏 0.7% 的坐标修正。"
+  },
+  {
     "title": "2026-11-11 – 11-13 周记：概览",
     "url": "/inside/blogs/blog/weekly/weekly-2026-11-13-overview.html",
     "date": "2026-11-13",
