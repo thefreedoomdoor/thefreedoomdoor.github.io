@@ -2,8 +2,8 @@
 
 > 更新时间：2026-11-13 12:52（北京时间）
 > 仓库：`thefreedoomdoor/thefreedoomdoor.github.io`（用户主页仓库，根目录即站点）
-> 线上：<https://thefreedoomdoor.pages.dev>（主） · <https://thefreedoomdoor.github.io>（备）
-> 当前状态：22 篇文章 / 28 个页面；主站已统一到 pages.dev；Cloudflare Pages 已接入 Git，push 自动部署；每周五 20:00 自动发周记；全部文章已脱敏
+> 线上：<https://thefreedomdoor.dpdns.org>（主） · <https://thefreedoomdoor.pages.dev>（CF 默认） · <https://thefreedoomdoor.github.io>（备）
+> 当前状态：22 篇文章 / 28 个页面；主站已统一到 thefreedomdoor.dpdns.org（Cloudflare Pages 自定义域）；Cloudflare Pages 已接入 Git，push 自动部署；每周五 20:00 自动发周记；全部文章已脱敏
 > 说明：本文档不含凭据与真实本机路径，可随仓库公开。
 
 ---
@@ -49,7 +49,7 @@ index.html / 404.html / sitemap.xml
 
 Cloudflare Pages 项目：
 
-- 项目名 `thefreedoomdoor`，地址 `https://thefreedoomdoor.pages.dev`
+- 项目名 `thefreedomdoor`，自定义域 `https://thefreedomdoor.dpdns.org`（默认 `thefreedoomdoor.pages.dev`）
 - 源：GitHub `thefreedoomdoor/thefreedoomdoor.github.io`，生产分支 `main`
 - 构建命令留空、输出目录 `/`、根目录空 —— 直接发布仓库里已提交的静态文件，不在云端跑构建
 - 预览部署关闭（`preview_deployment_setting: none`）：只有 `main` 会出生产部署

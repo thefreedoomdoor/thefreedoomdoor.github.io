@@ -2,7 +2,7 @@
 
 个人博客。源文件是 Markdown，用 Node 构建成静态 HTML，托管在 Cloudflare Pages（主）与 GitHub Pages（备）。
 
-线上地址：<https://thefreedoomdoor.pages.dev>
+线上地址：<https://thefreedomdoor.dpdns.org>
 
 ## 结构
 
